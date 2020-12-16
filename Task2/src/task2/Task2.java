@@ -39,13 +39,6 @@ public class Task2 {
         showGameGrid(GameGrid);
         fillTable();
 
-        String word = null;
-
-//        for (int i = 0; i < 7; i++) {
-//            
-//         word = GetfileData (i);
-//         
-//        }
     }
 
     /**
@@ -91,57 +84,46 @@ public class Task2 {
         }
 
     }
-
-//    public static String GetfileData (int item){
-//        ArrayList<String> words = new ArrayList<>();
-//        
-//      
-//            File myObj = new File("small.txt");
-//        try {
-//           Scanner myReader = new Scanner(myObj);
-//                while (myReader.hasNextLine()) {
-//                    String data = myReader.nextLine();
-//                    words.add(data);
-//                    
-//                    
-//                }
-//        } catch (FileNotFoundException ex) {
-//            System.out.println("File not found");
-//        }
-//
-//        return words.get(item);
-//    
-//    }
+    /**
+     * parses through data file and adds data to a 1D array.
+     * then creates a 2D array and add items from the 1d array
+     * to the 2D array
+     */
     public static void fillTable() {
 
         File myObj = new File("small.txt");
 
         int colms = 4;
-        int rows = 2;
+        int rows = 4;
 
         String[][] table = new String[rows][colms];
-        
+
         ArrayList<String> ws = new ArrayList<>();
-       int item = 0;
-        
+        ArrayList<String> ws2 = new ArrayList<>();
+        int item = 0;
+        int item2 = 0;
+
         try {
             Scanner scanF = new Scanner(myObj);
             while (scanF.hasNextLine()) {
 
-                 ws.add(scanF.nextLine());
+                ws.add(scanF.nextLine());
+                
+                ws2.add(ws.get(item2));
+                ws2.add(ws.get(item2));
+                item2++;
             }
-//            System.out.println(ws);
 
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < colms; j++) {
-                    table[i][j] = ws.get(item);
+                    table[i][j] = ws2.get(item);
                     item++;
                 }
 
             }
-            for (String[] a : table) {
-                for (String i : a) {
-                    System.out.print(i + "\t");
+            for (String[] row : table) {
+                for (String s : row) {
+                    System.out.print("[" + s +"]" +  "\t");
                 }
                 System.out.println("\n");
             }
