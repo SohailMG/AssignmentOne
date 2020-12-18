@@ -2,6 +2,8 @@ package task1;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,6 +29,7 @@ public class Task1 {
                 String encryption = fileReader.nextLine();
                 String regex = "\\d+";
                 System.out.println("");
+                writeToFile('\n');
 
                 for (int i = 0; i < encryption.length(); i++) {
 
@@ -42,12 +45,18 @@ public class Task1 {
                             while (m.find()) {
                                 int num = Integer.parseInt(m.group());
                                 System.out.print(consonants[num]);
+                                
+                                char content = consonants[num];
+                                writeToFile(content);
                             }
                         } catch (StringIndexOutOfBoundsException siobe) {
                             char num = encryption.charAt(encryption.length() - 2);
                             if (num == 'C') {
                                 char d = encryption.charAt(encryption.length() - 1);
                                 System.out.print(consonants[Character.getNumericValue(d)]);
+                                
+                                char content = consonants[Character.getNumericValue(d)];
+                                writeToFile(content);
                             }
 
                         }
@@ -63,12 +72,18 @@ public class Task1 {
                             while (m.find()) {
                                 int num = Integer.parseInt(m.group());
                                 System.out.print(vowels[num]);
+                                
+                                char content = vowels[num];
+                                writeToFile(content);
                             }
                         } catch (StringIndexOutOfBoundsException siobe) {
                             char num = encryption.charAt(encryption.length() - 2);
                             if (num == 'V') {
                                 char d = encryption.charAt(encryption.length() - 1);
                                 System.out.print(vowels[Character.getNumericValue(d)]);
+                                
+                                char content = vowels[Character.getNumericValue(d)];
+                                writeToFile(content);
                             }
 
                         }
@@ -76,6 +91,7 @@ public class Task1 {
                     }
                     if (c == ' ') {
                         System.out.print(' ');
+                        writeToFile(' ');
 
                     }
 
@@ -86,5 +102,22 @@ public class Task1 {
             System.out.println("File doesn't exit");
         }
 
+    }
+
+    public static void writeToFile(char content) {
+
+        try {
+            File output = new File("output.txt");
+            if (output.createNewFile()) {
+                System.out.println("File created: " + output.getName());
+            } else {
+                FileWriter myWriter = new FileWriter("output.txt",true);
+                myWriter.write(content);
+                myWriter.close();
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 }
