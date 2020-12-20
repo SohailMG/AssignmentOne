@@ -17,6 +17,7 @@ abstract class State {
 //    memeber variables used for setMins and setHours
     public int Mins;
     public int hrs;
+    public Scanner scan;
 //    End used to quite program when it is set to True
     public boolean End;
 
@@ -56,9 +57,9 @@ class Start extends State {
 
         while (true) {
 
-            System.out.println("> Press MODE: ");
-            Scanner s2 = new Scanner(System.in);
-            String mood = s2.next();
+            System.out.println("           >MODE<             " + "\n" + ">");
+            scan = new Scanner(System.in);
+            String mood = scan.next();
 
             switch (mood) {
                 case "MODE":
@@ -66,6 +67,7 @@ class Start extends State {
                     return;
                 case "q":
                     End = true;
+
                     return;
 
                 default:
@@ -88,6 +90,7 @@ class Time extends State {
         System.out.println("------------------------------");
         System.out.println("          Time Mode         ");
         System.out.println("------------------------------");
+        System.out.println("Time: " + State.setHours.hrs + " hours" + ":" + State.setMins.Mins + " Minuts");
 
     }
 
@@ -96,14 +99,17 @@ class Time extends State {
 
         while (true) {
 
-            System.out.println("> Press Set to set to Hours ");
-            Scanner s1 = new Scanner(System.in);
-            String btn = s1.next();
+            System.out.println("         >MODE< | >SET<        " + "\n" + ">");
+            scan = new Scanner(System.in);
+            String btn = scan.next();
 
             switch (btn) {
 
-                case "Set":
+                case "SET":
                     current = setHours;
+                    return;
+                case "MODE":
+                    current = altimeter;
                     return;
                 case "q":
                     End = true;
@@ -134,25 +140,25 @@ class SetHours extends State {
     @Override
     void checkAction() {
         while (true) {
-            System.out.println("> Press Set to add 1 to Hours: ");
-            System.out.println("> Press Mode to set minuts   : ");
-            Scanner s1 = new Scanner(System.in);
-            String btn = s1.next();
+
+            System.out.println("         >MODE< | >SET<        " + "\n" + ">");
+            scan = new Scanner(System.in);
+            String btn = scan.next();
 
             switch (btn) {
 
-                case "Set":
+                case "SET":
                     hrs++;
-                    System.out.println("Hours : " + hrs);
+                    System.out.println("Hours added : " + hrs);
                     return;
-                case "Mode":
+                case "MODE":
                     current = setMins;
                     return;
                 case "q":
                     End = true;
                     return;
                 default:
-                    System.out.println("> Please Choose Set or Mode: ");
+                    System.out.println("> Please Choose SET or MODE: ");
 
             }
         }
@@ -166,6 +172,8 @@ class SetHours extends State {
  */
 class Altimeter extends State {
 
+    Scanner s1;
+
     @Override
     void checkState() {
         System.out.println("------------------------------");
@@ -177,18 +185,19 @@ class Altimeter extends State {
     @Override
     void checkAction() {
         while (true) {
-            System.out.println("> Press Set to remain       : ");
-            System.out.println("> Press Mode to show Time   : ");
-            Scanner s1 = new Scanner(System.in);
-            String btn = s1.next();
+
+            System.out.println("         >MODE< | >SET<        " + "\n" + ">");
+            scan = new Scanner(System.in);
+            String btn = scan.next();
 
             switch (btn) {
 
-                case "Set":
+                case "SET":
                     System.out.println("Mode Altimeter...");
                     return;
-                case "Mode":
+                case "MODE":
                     current = time;
+
                     return;
                 case "q":
                     End = true;
@@ -218,25 +227,25 @@ class SetMins extends State {
     @Override
     void checkAction() {
         while (true) {
-            System.out.println("> Press Set to add 1 to minuts : ");
-            System.out.println("> Press Mode to show Time      : ");
-            Scanner s1 = new Scanner(System.in);
-            String btn = s1.next();
+            System.out.println("         >MODE< | >SET<        " + "\n" + ">");
+
+            scan = new Scanner(System.in);
+            String btn = scan.next();
 
             switch (btn) {
 
-                case "Set":
+                case "SET":
                     Mins++;
                     System.out.println("Minutes added : " + Mins);
                     return;
-                case "Mode":
+                case "MODE":
                     current = time;
                     return;
                 case "q":
                     End = true;
                     return;
                 default:
-                    System.out.println("> Please Choose Set or Mode: ");
+                    System.out.println("> Please Choose SET or MODE: ");
 
             }
         }
@@ -255,12 +264,19 @@ public class Task3 {
         State.setHours = new SetHours();
         State.setMins = new SetMins();
         State.current = State.start;
+        try {
+            while (!State.current.End) {
 
-        while (!State.current.End) {
+                State.current.checkState();
+                State.current.checkAction();
 
-            State.current.checkState();
-            State.current.checkAction();
-
+            }
+        } finally {
+            State.start.scan.close();
+            State.altimeter.scan.close();
+            State.time.scan.close();
+            State.setHours.scan.close();
+            State.setMins.scan.close();
         }
 
     }

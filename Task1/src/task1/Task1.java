@@ -13,28 +13,45 @@ public class Task1 {
     public static void main(String[] args) {
 
         String dataFile = System.getProperty("user.dir") + File.separator + "datafile.txt";
-
+        
+//        array of both vowels and consosntants 
         char[] vowels = {' ', 'a', 'A', 'e', 'E', 'i', 'I', 'o', 'O', 'u', 'U', 'y', 'Y'};
         char[] consonants = {' ', 'b', 'B', 'c', 'C', 'd', 'D', 'f', 'F', 'g', 'G', 'h', 'H',
             'j', 'J', 'k', 'K', 'l', 'L', 'm', 'M', 'n', 'N', 'p', 'P',
             'q', 'Q', 'r', 'R', 's', 'S', 't', 'T', 'v', 'V', 'w', 'W', 'x', 'X', 'z', 'Z'};
 
+//       file object of encrypted file 
         File f = new File(dataFile);
 
+        /**
+         * try and catch block to catch filenotfound exception.
+        */
         try {
+//          creating a filereader scanner object
             Scanner fileReader = new Scanner(f);
 
             while (fileReader.hasNextLine()) {
 
+//              storing encrypted file content into a string variable 
                 String encryption = fileReader.nextLine();
+                
+//              regular expression to extract digits from a given 
                 String regex = "\\d+";
+                
                 System.out.println("");
                 writeToFile('\n');
 
+                /**
+                 * parsing through encrypted string 
+                 */
                 for (int i = 0; i < encryption.length(); i++) {
 
                     char c = encryption.charAt(i);
 
+                    /**
+                     * checking if a character is a C.
+                     * if so then a regex is used to extract any numbers of followed by C
+                     */
                     if (c == 'C') {
                         try {
                             String Cnum = encryption.substring(i, i + 3);
@@ -43,12 +60,20 @@ public class Task1 {
                             Matcher m = p.matcher(Cnum);
 
                             while (m.find()) {
+//                                converting character to an integer
                                 int num = Integer.parseInt(m.group());
                                 System.out.print(consonants[num]);
                                 
+//                                writing deciphered character into a file
                                 char content = consonants[num];
                                 writeToFile(content);
                             }
+                           /** 
+                            * exception is thrown when line ends with a char followed by one digit
+                            * when exception is thrown.
+                            * checking if the second last char is a C.
+                            * then will convert char followed by C into an integer and print out it's value
+                            */
                         } catch (StringIndexOutOfBoundsException siobe) {
                             char num = encryption.charAt(encryption.length() - 2);
                             if (num == 'C') {
@@ -76,6 +101,12 @@ public class Task1 {
                                 char content = vowels[num];
                                 writeToFile(content);
                             }
+                            /** 
+                            * exception is thrown when line ends with a char followed by one digit
+                            * when exception is thrown.
+                            * check if the second last char is a V.
+                            * then will convert char followed by V into an integer and print out it's value
+                            */
                         } catch (StringIndexOutOfBoundsException siobe) {
                             char num = encryption.charAt(encryption.length() - 2);
                             if (num == 'V') {
@@ -89,6 +120,7 @@ public class Task1 {
                         }
 
                     }
+//                    checking if a file contains a space character
                     if (c == ' ') {
                         System.out.print(' ');
                         writeToFile(' ');
@@ -104,6 +136,11 @@ public class Task1 {
 
     }
 
+    /**
+     * writes the deciphered content into a text file.
+     * takes deciphered letter as a parameter.
+     * @param content
+     */
     public static void writeToFile(char content) {
 
         try {
@@ -111,13 +148,12 @@ public class Task1 {
             if (output.createNewFile()) {
                 System.out.println("File created: " + output.getName());
             } else {
-                FileWriter myWriter = new FileWriter("output.txt",true);
-                myWriter.write(content);
-                myWriter.close();
+                try (FileWriter w = new FileWriter("output.txt",true)) {
+                    w.write(content);
+                }
             }
         } catch (IOException e) {
             System.out.println("An error occurred.");
-            e.printStackTrace();
         }
     }
 }
