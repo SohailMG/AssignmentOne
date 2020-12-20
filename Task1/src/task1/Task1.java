@@ -142,17 +142,20 @@ public class Task1 {
      * @param content
      */
     public static void writeToFile(char content) {
+        
+        boolean FileCreated;
 
         try {
-            File output = new File("output.txt");
-            if (output.createNewFile()) {
-                System.out.println("File created: " + output.getName());
+            File Results = new File("Results.txt");
+            if (Results.createNewFile()) {
+                FileCreated = true;
             } else {
-                try (FileWriter w = new FileWriter("output.txt",true)) {
+                try (FileWriter w = new FileWriter("Results.txt", true)) {
                     w.write(content);
                 }
             }
         } catch (IOException e) {
+            FileCreated = false;
             System.out.println("An error occurred.");
         }
     }

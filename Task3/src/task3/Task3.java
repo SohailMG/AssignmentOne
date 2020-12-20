@@ -9,6 +9,10 @@ import java.util.Scanner;
  * @author Sohail Gsais
  *
  */
+
+
+////////////////////////////////////////////////////////////////////////////////
+
 /**
  * abstract class State holds all states for the watch and member functions
  */
@@ -41,6 +45,8 @@ abstract class State {
 
 /**
  * beginning state
+ * MODE > changes state to altimeter.
+ * no SET action in this 
  */
 class Start extends State {
 
@@ -81,7 +87,11 @@ class Start extends State {
 }
 
 /**
- * mode = time , state
+ * Time state.
+ * Time added is shown in this state.
+ * MODE changes state to altimeter.
+ * SET changes to setHours state
+ * 
  */
 class Time extends State {
 
@@ -111,7 +121,7 @@ class Time extends State {
                 case "MODE":
                     current = altimeter;
                     return;
-                case "q":
+                case "QUIT":
                     End = true;
                     return;
                 default:
@@ -154,7 +164,7 @@ class SetHours extends State {
                 case "MODE":
                     current = setMins;
                     return;
-                case "q":
+                case "QUIT":
                     End = true;
                     return;
                 default:
@@ -168,7 +178,9 @@ class SetHours extends State {
 }
 
 /**
- * mode = set hours , state
+ *     Altimeter State
+ * SET  >  performs no actions
+ * MODE >  changes state to Time
  */
 class Altimeter extends State {
 
@@ -193,13 +205,13 @@ class Altimeter extends State {
             switch (btn) {
 
                 case "SET":
-                    System.out.println("Mode Altimeter...");
+                    current = altimeter;
                     return;
                 case "MODE":
                     current = time;
 
                     return;
-                case "q":
+                case "QUIT":
                     End = true;
                     return;
                 default:
@@ -212,7 +224,9 @@ class Altimeter extends State {
 }
 
 /**
- * mode = set minutes , state
+ * setMins State
+ * SET  > adds one minute to time
+ * MODE > changes state to Time
  */
 class SetMins extends State {
 
@@ -241,7 +255,7 @@ class SetMins extends State {
                 case "MODE":
                     current = time;
                     return;
-                case "q":
+                case "QUIT":
                     End = true;
                     return;
                 default:
@@ -264,6 +278,9 @@ public class Task3 {
         State.setHours = new SetHours();
         State.setMins = new SetMins();
         State.current = State.start;
+        
+//        program loops while End is true
+//        end is false when user enters QUIT
         try {
             while (!State.current.End) {
 
@@ -271,6 +288,7 @@ public class Task3 {
                 State.current.checkAction();
 
             }
+//            closing scanner object from all states once program ends
         } finally {
             State.start.scan.close();
             State.altimeter.scan.close();
