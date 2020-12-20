@@ -1,13 +1,13 @@
 # AssignmentOne
 Java assignment consisting of three seperate tasks
 
-#Task 1:-
+# Task1
 The task focuses on using java to read and write to files.
 given an encrypted data file the goal is to decrypt the file and write the results to another text file.
 This file contains a passage of text that is encoded. The encoded data file uses a very simple cipher based on the encryption of the positions of vowels and 
 consonants from the English alphabet.
 
-for instance first line of data file contains the following string:
+for instance first line of data file contains the following string.
 ,,,
 C12V1 C2 V5C23
 ,,,
