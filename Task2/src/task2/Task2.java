@@ -89,7 +89,7 @@ public class Task2 {
         }
         for (String[] r : Board) {
             for (String s : r) {
-                System.out.print("    [" + s + "]");
+                System.out.print("[" + s + "]");
             }
             System.out.println();
         }
