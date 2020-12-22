@@ -14,23 +14,36 @@ public class Task2 {
     static int colm = 4;
     static String[][] Board;
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) {
 
         ArrayList pairsArr = readFile();
         Collections.shuffle(pairsArr);
 
         fillBoard();
         HashMap boardPos = creatPositions(pairsArr, pos);
-        System.out.println(pairsArr);
 
         while (true) {
             try {
 
-                Scanner inpt = new Scanner(System.in);
-                String userInput = inpt.nextLine();
-
-                reveal(boardPos, userInput);
+                /*
+                    storing position of first word 
+                 */
+                Scanner firstPos = new Scanner(System.in);
+                System.out.print("Enter first Position > ");
+                String firstInput = firstPos.nextLine();
                 
+                
+
+                /*
+                    storing position of second word 
+                 */
+                Scanner secondPos = new Scanner(System.in);
+                System.out.print("Enter Second Position > ");
+                String secondInput = secondPos.nextLine();
+
+//               displying words from chosen postions
+                reveal(boardPos, firstInput, secondInput);
+
             } catch (Exception e) {
                 System.out.print("Enter a valid Position > ");
             }
@@ -89,7 +102,7 @@ public class Task2 {
         }
         for (String[] r : Board) {
             for (String s : r) {
-                System.out.print("[" + s + "]");
+                System.out.print("    [" + s + "]");
             }
             System.out.println();
         }
@@ -111,7 +124,6 @@ public class Task2 {
 
             positions.put((String) pos.get(i), (String) pairsArr.get(i));
         }
-        System.out.println(positions);
         return positions;
 
     }
@@ -122,18 +134,55 @@ public class Task2 {
      * with a word from hash map using user input as key.
      *
      * @param boardPos
-     * @param userInput
+     * @param firstInput
+     * @param secondInput
      */
-    public static void reveal(HashMap boardPos, String userInput) {
+    public static void reveal(HashMap boardPos, String firstInput, String secondInput) {
+        
+        int matches = 1;
 
-        int rowPos = Character.getNumericValue(userInput.charAt(0));
-        int colmPos = Character.getNumericValue(userInput.charAt(1));
+        int firstrowPos = Character.getNumericValue(firstInput.charAt(0));
+        int firstcolmPos = Character.getNumericValue(firstInput.charAt(1));
 
-        if (boardPos.containsKey(userInput)) {
-            Board[rowPos][colmPos] = (String) boardPos.get(userInput);
-        } else {
-            System.out.println(userInput + " is out of range");
+        int secondrowPos = Character.getNumericValue(secondInput.charAt(0));
+        int secondcolmPos = Character.getNumericValue(secondInput.charAt(1));
+
+        String word1 = (String) boardPos.get(firstInput);
+        String word2 = (String) boardPos.get(secondInput);
+
+        if (boardPos.containsKey(firstInput)) {
+            
+            System.out.println("Your guesses....");
+            System.out.println("------------------------------");
+            
+            
+            Board[firstrowPos][firstcolmPos] = (String) boardPos.get(firstInput);
+            Board[secondrowPos][secondcolmPos] = (String) boardPos.get(secondInput);
+            
+            for (String[] r : Board) {
+            for (String s : r) {
+                System.out.print("[" + s + "]");
+            }
+            System.out.println();
         }
+            if (word1.equals(word2)) {
+                System.out.println("Match found : " + matches);
+                System.out.println("------------------------------");
+                matches++;
+                Board[firstrowPos][firstcolmPos] =   (String) boardPos.get(firstInput)  + "*";
+                Board[secondrowPos][secondcolmPos] = (String) boardPos.get(secondInput) + "*";
+            } else {
+                System.out.println("No match found....");
+                System.out.println("------------------------------");
+                Board[firstrowPos][firstcolmPos] =   "XXXXXX";
+                Board[secondrowPos][secondcolmPos] = "XXXXXX";
+
+            }
+        } else {
+            System.out.println(firstInput + " is out of range");
+        }
+        
+        
 
         for (String[] r : Board) {
             for (String s : r) {
