@@ -4,71 +4,92 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Scanner;
 
-/**
- * A Memory Game where user is given a grid of hidden words. Main goal is to
- * find the matching Pairs.
- *
- * @author Sohail Gsais
- *
- */
 public class Task2 {
 
-    public static void main(String[] args) {
-        
-        int colms = 4;
-        int rows = 4;
+    static ArrayList<String> pos = new ArrayList<>();
+    static int row = 4;
+    static int colm = 4;
+    static String[][] Board;
 
-        String[][] table = new String[rows][colms];
+    public static void main(String[] args) throws FileNotFoundException {
 
-        ArrayList<String> posRanges = new ArrayList<>();
+        ArrayList pairsArr = readFile();
+        Collections.shuffle(pairsArr);
 
-        String[][] GameGrid
-                = {{"0  ", "  ******   ", "   ******    ", "   ******    ", "   ******    "},
-                {"1  ", "  ******   ", "   ******    ", "   ******    ", "   ******    "},
-                {"2  ", "  ******   ", "   ******    ", "   ******    ", "   ******    "},
-                {"3  ", "  ******   ", "   ******    ", "   ******    ", "   ******    "}};
+        fillBoard();
+        HashMap boardPos = creatPositions(pairsArr, pos);
+        System.out.println(pairsArr);
 
-        boolean inRange = true;
-        while (inRange) {
+        while (true) {
+            try {
 
-            showGameGrid(GameGrid);
+                Scanner inpt = new Scanner(System.in);
+                String userInput = inpt.nextLine();
 
-            Scanner row = new Scanner(System.in);
-            Scanner colm = new Scanner(System.in);
-
-            System.out.println("Choose Row and Col > ");
-
-            int Rowpos = row.nextInt();
-            int Colpos = colm.nextInt();
-
-            String inpt = Rowpos + "" + Colpos;
-            
-            
-
-            fillTable(posRanges,table,rows,colms);
-            showGameGrid(GameGrid);
-            showWord(GameGrid, Rowpos,Colpos,table);
-
-            System.out.println(inRange);
-
+                reveal(boardPos, userInput);
+                
+            } catch (Exception e) {
+                System.out.print("Enter a valid Position > ");
+            }
         }
+
     }
 
     /**
-     * displays the Game Grid
+     * parses through file and adds words within the file into an array
      *
-     * @param GameGrid
+     * @return an array list of words duplicated.
      */
-    public static void showGameGrid(String[][] GameGrid) {
+    public static ArrayList readFile() {
 
-        System.out.println("" + "        0" + "          1" + "          2" + "         3");
-        System.out.println("  ____________________________________");
+        ArrayList<String> words = new ArrayList<>();
+        ArrayList<String> wPairs = new ArrayList<>();
 
-        for (String[] row : GameGrid) {
-            for (String s : row) {
-                System.out.print(s);
+        File f = new File("small.txt");
+
+        Scanner s;
+        int item = 0;
+        try {
+            s = new Scanner(f);
+
+            while (s.hasNextLine()) {
+
+                words.add(s.nextLine());
+
+                wPairs.add((words.get(item)));
+                wPairs.add((words.get(item)));
+
+                item++;
+            }
+
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found");
+        }
+        return wPairs;
+
+    }
+
+    /**
+     * displays game board with hidden words
+     */
+    public static void fillBoard() {
+
+        Task2.Board = new String[row][colm];
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < colm; j++) {
+                Board[i][j] = "XXXXXX";
+                pos.add(i + "" + j);
+
+            }
+
+        }
+        for (String[] r : Board) {
+            for (String s : r) {
+                System.out.print("    [" + s + "]");
             }
             System.out.println();
         }
@@ -76,75 +97,50 @@ public class Task2 {
     }
 
     /**
-     * shows word in selected position
+     * creates a hash map of positions as keys and words as values
      *
-     * @param GameGrid
-     * @param row
-     * @param colm
-     * @param table
-     *
-     * 
+     * @param pairsArr
+     * @param pos
+     * @return returns a hash map
      */
-    public static void showWord(String[][] GameGrid, int row,int colm,String[][] table) {
-        
-        GameGrid[row][colm] = table[row][colm];
-        
-//        for (String[] r : table) {
-//                for (String s : r) {
-//                    System.out.print("[" + s + "]" + "\t");
-//                }
-//                System.out.println("\n");
-//            }
+    public static HashMap creatPositions(ArrayList pairsArr, ArrayList pos) {
+
+        HashMap<String, String> positions = new HashMap<>();
+
+        for (int i = 0; i < pos.size(); i++) {
+
+            positions.put((String) pos.get(i), (String) pairsArr.get(i));
+        }
+        System.out.println(positions);
+        return positions;
 
     }
 
     /**
-     * parses through data file and adds data to a 1D array. then creates a 2D
-     * array and add items from the 1d array to the 2D array
+     * converts user input from string to integer. splits input into two chars,
+     * index at 0 = row and index at 1 = column. replaces the chosen position
+     * with a word from hash map using user input as key.
      *
-     * @param posRanges
-     * @param table
-     * @param rows
-     * @param colms
+     * @param boardPos
+     * @param userInput
      */
-    public static void fillTable(ArrayList posRanges,String[][] table,int rows,int colms) {
+    public static void reveal(HashMap boardPos, String userInput) {
 
-        File small = new File("small.txt");
+        int rowPos = Character.getNumericValue(userInput.charAt(0));
+        int colmPos = Character.getNumericValue(userInput.charAt(1));
 
-        ArrayList<String> ws = new ArrayList<>();
-        ArrayList<String> ws2 = new ArrayList<>();
-
-        int item = 0;
-        int item2 = 0;
-
-        try {
-            Scanner scanF = new Scanner(small);
-            while (scanF.hasNextLine()) {
-
-                ws.add(scanF.nextLine());
-
-                ws2.add(ws.get(item2));
-                ws2.add(ws.get(item2));
-
-                Collections.shuffle(ws2);
-
-                item2++;
-            }
-
-            for (int i = 0; i < rows; i++) {
-                for (int j = 0; j < colms; j++) {
-                    table[i][j] = ws2.get(item);
-                    posRanges.add(i + "" + j);
-                    item++;
-                }
-
-            }
-
-        } catch (FileNotFoundException ex) {
-            System.out.println("File not found");
+        if (boardPos.containsKey(userInput)) {
+            Board[rowPos][colmPos] = (String) boardPos.get(userInput);
+        } else {
+            System.out.println(userInput + " is out of range");
         }
 
-        
+        for (String[] r : Board) {
+            for (String s : r) {
+                System.out.print("[" + s + "]");
+            }
+            System.out.println();
+        }
 
     }
 
