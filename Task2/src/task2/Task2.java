@@ -10,13 +10,15 @@ import java.util.Scanner;
 public class Task2 {
 
     static ArrayList<String> pos = new ArrayList<>();
-    static int row = 4;
-    static int colm = 4;
+    static int row ;
+    static int colm;
     static String[][] Board;
 
     public static void main(String[] args) {
-
-        ArrayList pairsArr = readFile();
+        
+        int level =startGame();
+        
+        ArrayList pairsArr = readFile(level);
         Collections.shuffle(pairsArr);
 
         fillBoard();
@@ -56,16 +58,33 @@ public class Task2 {
      *
      * @return an array list of words duplicated.
      */
-    public static ArrayList readFile() {
+    public static ArrayList readFile(int level) {
 
         ArrayList<String> words = new ArrayList<>();
         ArrayList<String> wPairs = new ArrayList<>();
 
-        File f = new File("small.txt");
+        File f = null ;
 
         Scanner s;
         int item = 0;
         try {
+            
+            if(level == 1){
+                row = 4;
+                colm = 4;
+                f = new File("small.txt");
+            }
+            else if(level == 2){
+                row = 4;
+                colm = 8;
+                f = new File("medium.txt");
+            }
+            else if(level == 3){
+                row = 4;
+                colm = 16;
+                f = new File("large.txt");
+            }
+            System.out.println(row);
             s = new Scanner(f);
 
             while (s.hasNextLine()) {
@@ -190,6 +209,33 @@ public class Task2 {
             }
             System.out.println();
         }
+
+    }
+    /**
+     * displays first screen to the user with level choices.
+     * 
+     * @return integer which is used to determine the level. 
+     */
+    public static int startGame(){
+        
+        System.out.println("------------------------------------");
+        System.out.println("   Welcome to Memory Square Game    ");
+        System.out.println("------------------------------------" + "\n");
+        
+        System.out.println("Easy------------------------------- 1");
+        System.out.println("Intermediat------------------------ 2");
+        System.out.println("Master----------------------------- 3");
+        System.out.println("Give up --------------------------- 4");
+        
+        System.out.print("Choose Difficulty > ");
+        Scanner lvl = new Scanner(System.in);
+        int levelChosen = lvl.nextInt();
+        
+        
+        
+        
+        
+        return levelChosen;
 
     }
 
