@@ -3,20 +3,32 @@ package task2;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
+/**
+ * This is a Memory Game where the user is given a grid of hidden words and the
+ * goal is to get all the matching words and complete the grid. the higher the
+ * level the bigger the grid.
+ *
+ * @author Sohail Gsais
+ *
+ */
 public class Task2 {
 
+    // declaring static variables that will be used by functions
     static ArrayList<String> pos = new ArrayList<>();
     static int row;
     static int colm;
     static String[][] Board;
     static boolean userQuit = true;
+    static int matches = 1;
+    // brdRow is used to display index position of each row of GameBoard
+    static int brdRow = 0;
+    static int brdColm = 0;
 
     public static void main(String[] args) {
 
@@ -30,57 +42,48 @@ public class Task2 {
 
         boolean inValidInput = true;
 
-
         /**
-         * checking for mismatch input exception. startGame function will keep
-         * looping until the input is an Integer.
-         * also checking if input is in range [1, 2 , 3 ,4]
+         * checking for mismatch input exception. getLeve function will keep
+         * looping until the input is an Integer. also checking if input is in
+         * range [1, 2 , 3 ,4]
          */
         while (inValidInput) {
             try {
-                level = startGame();
-                
-                if(level == 4){
+                level = getLeve();
+
+                if (level == 4) {
                     inValidInput = false;
                     userQuit = false;
-                    
-                
-                
-                }
 
-                if (validInput.contains(level)) {
+                } else if (validInput.contains(level)) {
 
                     inValidInput = false;
-                    
 
                 } else {
                     System.out.println("\n" + "-------------------------------------");
-                   System.out.println(level + " is out of range choose 1 2 3 or 4 > " + "\n");
+                    System.out.println(level + " is out of range choose 1 2 3 or 4 > " + "\n");
 
                 }
 
             } catch (Exception e) {
-                    System.out.println("\n");
+                System.out.println("\n");
                 System.out.println("********** Invalid Entry ***********" + "\n");
 
             }
         }
-        HashMap boardPos = null ;
+        HashMap boardPos = null;
 
         try {
-            
-      
-        ArrayList pairsArr = readFile(level);
-        Collections.shuffle(pairsArr);
-        
 
-        fillBoard();
-         boardPos = creatPositions(pairsArr, pos);
+            ArrayList pairsArr = readFile(level);
+            Collections.shuffle(pairsArr);
+
+            fillBoard();
+            boardPos = creatPositions(pairsArr, pos);
         } catch (Exception e) {
             userQuit = false;
-            inValidInput = false;
+//            inValidInput = false;
         }
-        
 
         while (userQuit) {
             try {
@@ -110,9 +113,11 @@ public class Task2 {
     }
 
     /**
-     * parses through file and adds words within the file into an array
+     * parses through a file of words and adds them into an array, then
+     * duplicates the items from that array into another array. a file is chosen
+     * in accordance to user input.
      *
-     * @param level level chosen by the user either 1,2 or 3
+     * @param level level chosen by the user either 1,2 3 or 4
      * @return an array list of words duplicated.
      */
     public static ArrayList readFile(int level) {
@@ -126,23 +131,30 @@ public class Task2 {
         int item = 0;
         try {
 
-            if (level == 1) {
-                row = 4;
-                colm = 4;
-                f = new File("small.txt");
-            } else if (level == 2) {
-                row = 4;
-                colm = 8;
-                f = new File("medium.txt");
-            } else if (level == 3) {
-                row = 8;
-                colm = 8;
-                f = new File("large.txt");
+            switch (level) {
+                case 1:
+                    row = 4;
+                    colm = 4;
+                    f = new File("small.txt");
+                    break;
+                case 2:
+                    row = 4;
+                    colm = 8;
+                    f = new File("medium.txt");
+                    break;
+                case 3:
+                    row = 8;
+                    colm = 8;
+                    f = new File("large.txt");
+                    break;
+                case 4:
+
+                    userQuit = false;
+                    break;
+                default:
+                    break;
             }
-             else if (level == 8) {
-                userQuit = false;
-            }
-            System.out.println(row);
+
             s = new Scanner(f);
 
             while (s.hasNextLine()) {
@@ -167,7 +179,7 @@ public class Task2 {
      */
     public static void fillBoard() {
 
-        Task2.Board = new String[row][colm];
+        Board = new String[row][colm];
 
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < colm; j++) {
@@ -177,12 +189,8 @@ public class Task2 {
             }
 
         }
-        for (String[] r : Board) {
-            for (String s : r) {
-                System.out.print("    [" + s + "]");
-            }
-            System.out.println();
-        }
+
+        showBoard();
 
     }
 
@@ -216,7 +224,7 @@ public class Task2 {
      */
     public static void reveal(HashMap boardPos, String firstInput, String secondInput) {
 
-        int matches = 1;
+        
 
         int firstrowPos = Character.getNumericValue(firstInput.charAt(0));
         int firstcolmPos = Character.getNumericValue(firstInput.charAt(1));
@@ -229,26 +237,21 @@ public class Task2 {
 
         if (boardPos.containsKey(firstInput)) {
 
-            System.out.println("Your guesses....");
+            System.out.println("\n" + "Your guesses....");
             System.out.println("------------------------------");
 
             Board[firstrowPos][firstcolmPos] = (String) boardPos.get(firstInput);
             Board[secondrowPos][secondcolmPos] = (String) boardPos.get(secondInput);
 
-            for (String[] r : Board) {
-                for (String s : r) {
-                    System.out.print("[" + s + "]");
-                }
-                System.out.println();
-            }
+            showBoard();
             if (word1.equals(word2)) {
-                System.out.println("Match found : " + matches);
+                System.out.println("\n" + "Match found : " + matches);
                 System.out.println("------------------------------");
                 matches++;
                 Board[firstrowPos][firstcolmPos] = (String) boardPos.get(firstInput) + "*";
                 Board[secondrowPos][secondcolmPos] = (String) boardPos.get(secondInput) + "*";
             } else {
-                System.out.println("No match found....");
+                System.out.println("\n" + "No match found....");
                 System.out.println("------------------------------");
                 Board[firstrowPos][firstcolmPos] = "XXXXXX";
                 Board[secondrowPos][secondcolmPos] = "XXXXXX";
@@ -257,13 +260,7 @@ public class Task2 {
         } else {
             System.out.println(firstInput + " is out of range");
         }
-
-        for (String[] r : Board) {
-            for (String s : r) {
-                System.out.print("[" + s + "]");
-            }
-            System.out.println();
-        }
+        showBoard();
 
     }
 
@@ -272,7 +269,7 @@ public class Task2 {
      *
      * @return integer which is used to determine the level.
      */
-    public static int startGame() {
+    public static int getLeve() {
 
         System.out.println("------------------------------------");
         System.out.println("   Welcome to Memory Square Game    ");
@@ -281,14 +278,39 @@ public class Task2 {
         System.out.println("               Easy         > 1     ");
         System.out.println("            Intermediat     > 2     ");
         System.out.println("               Master       > 3     ");
-        System.out.println("              Give up       > 4     " );
+        System.out.println("              Give up       > 4     ");
 
-        System.out.print( "\n" + "Choose Difficulty > ");
+        System.out.print("\n" + "Choose Difficulty > ");
 
         Scanner lvl = new Scanner(System.in);
         int levelChosen = lvl.nextInt();
 
         return levelChosen;
+
+    }
+
+    public static void showColmPos(int colm) {
+
+        for (int i = 0; i < colm; i++) {
+            System.out.print("   " + i + "     ");
+
+        }
+        System.out.println();
+
+    }
+
+    public static void showBoard() {
+
+        showColmPos(colm);
+        for (String[] r : Board) {
+            System.out.print(brdRow);
+            for (String s : r) {
+                System.out.print("[" + s + "]");
+            }
+            brdRow++;
+            System.out.println();
+        }
+        brdRow = 0;
 
     }
 
