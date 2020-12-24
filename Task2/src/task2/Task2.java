@@ -20,17 +20,19 @@ import java.util.Set;
 public class Task2 {
 
     // declaring static variables that will be used by functions
-    static String firstInput; 
-    static String secondInput; 
+    static String firstInput,secondInput,makeGuess;
+
+    
     static ArrayList<String> pos = new ArrayList<>();
-    static int row;
-    static int colm;
+    
     static String[][] Board;
-    static boolean userQuit = true;
+    static int row , colm;
+    
+    static boolean userQuit = false;
     static int matches = 1;
-    // brdRow is used to display index position of each row of GameBoard
-    static int brdRow = 0;
-    static int brdColm = 0;
+
+    // brdRow and brdColm are used to displays row and colm positions of the board
+    static int brdRow = 0,brdColm = 0;
 
     public static void main(String[] args) {
 
@@ -55,7 +57,7 @@ public class Task2 {
 
                 if (level == 4) {
                     inValidInput = false;
-                    userQuit = false;
+                    userQuit = true;
 
                 } else if (validInput.contains(level)) {
 
@@ -63,13 +65,12 @@ public class Task2 {
 
                 } else {
                     System.out.println("\n" + "-------------------------------------");
-                    System.out.println(level + " is out of range choose 1 2 3 or 4 > " + "\n");
+                    System.out.println(level + " is out of range choose 1 2 3 or 4  " + "\n");
 
                 }
 
             } catch (Exception e) {
-                System.out.println("\n");
-                System.out.println("********** Invalid Entry ***********" + "\n");
+                System.out.println("\n" + "********** Invalid Entry ***********" + "\n");
 
             }
         }
@@ -83,34 +84,44 @@ public class Task2 {
             fillBoard();
             boardPos = creatPositions(pairsArr, pos);
         } catch (Exception e) {
-            userQuit = false;
-//            inValidInput = false;
+            userQuit = true;
         }
 
-        while (userQuit) {
+        while (!userQuit) {
             try {
 
-                /*
-                    storing position of first word 
-                 */
-                Scanner firstPos = new Scanner(System.in);
-                System.out.print("Enter first Position > ");
-                 firstInput = firstPos.nextLine();
-                 showFst( boardPos,  firstInput);
+                Scanner action = new Scanner(System.in);
+                System.out.print("Make a Guess 'yes' or 'no' ?  >  ");
+                makeGuess = action.nextLine();
 
-                /*
+                if (makeGuess.equals("no")) {
+                    userQuit = true;
+
+                } else if (makeGuess.equals("yes")) {
+
+                    /*
+                    storing position of first word 
+                     */
+                    Scanner firstPos = new Scanner(System.in);
+                    System.out.print("Enter first Position > ");
+                    firstInput = firstPos.nextLine();
+                    showFst(boardPos, firstInput);
+
+                    /*
                     storing position of second word 
-                 */
-                Scanner secondPos = new Scanner(System.in);
-                System.out.print("Enter Second Position > ");
-                secondInput = secondPos.nextLine();
+                     */
+                    Scanner secondPos = new Scanner(System.in);
+                    System.out.print("Enter Second Position > ");
+                    secondInput = secondPos.nextLine();
 
 //               displying words from chosen postions
-                reveal(boardPos, firstInput, secondInput);
+                    reveal(boardPos, firstInput, secondInput);
+                }
 
             } catch (Exception e) {
                 System.out.print("Enter a valid Position > ");
             }
+
         }
 
     }
@@ -152,7 +163,7 @@ public class Task2 {
                     break;
                 case 4:
 
-                    userQuit = false;
+                    userQuit = true;
                     break;
                 default:
                     break;
@@ -227,8 +238,6 @@ public class Task2 {
      */
     public static void reveal(HashMap boardPos, String firstInput, String secondInput) {
 
-        
-
         int firstrowPos = Character.getNumericValue(firstInput.charAt(0));
         int firstcolmPos = Character.getNumericValue(firstInput.charAt(1));
 
@@ -249,14 +258,13 @@ public class Task2 {
 
             showBoard();
             if (word1.equals(word2)) {
-                System.out.println("\n" + "Match found : " + matches);
-                System.out.println("------------------------------");
+                System.out.println("\n" + "Match found : " + matches + "\n");
+
                 matches++;
                 Board[firstrowPos][firstcolmPos] = (String) boardPos.get(firstInput) + "*";
                 Board[secondrowPos][secondcolmPos] = (String) boardPos.get(secondInput) + "*";
             } else {
-                System.out.println("\n" + "No match found....");
-                System.out.println("------------------------------");
+                System.out.println("\n" + "No match found...." + "\n");
                 Board[firstrowPos][firstcolmPos] = "XXXXXX";
                 Board[secondrowPos][secondcolmPos] = "XXXXXX";
 
@@ -267,28 +275,27 @@ public class Task2 {
         showBoard();
 
     }
+
     /**
      * reveals first word chosen by the user
-     * @param boardPos  a hashmap of 2D array indexes as keys and words as values.
+     *
+     * @param boardPos a hashmap of 2D array indexes as keys and words as
+     * values.
      * @param firstInput the first position chosen by the user i.e 01
      */
-    public static void showFst(HashMap boardPos, String firstInput){
+    public static void showFst(HashMap boardPos, String firstInput) {
         int firstrowPos = Character.getNumericValue(firstInput.charAt(0));
         int firstcolmPos = Character.getNumericValue(firstInput.charAt(1));
-        
-        
-        
+
         if (boardPos.containsKey(firstInput)) {
 
-            System.out.println("\n" + "Your guesses....");
-            System.out.println("------------------------------");
+            System.out.println("\n" + "Your guesses...." + "\n");
 
             Board[firstrowPos][firstcolmPos] = (String) boardPos.get(firstInput);
             showBoard();
-        
+
         }
- 
-    
+
     }
 
     /**
@@ -315,7 +322,11 @@ public class Task2 {
         return levelChosen;
 
     }
-
+    
+    /**
+     * displays column positions at the top of gameboard
+     * @param colm is the number of columns a gameboard has
+     */
     public static void showColmPos(int colm) {
 
         for (int i = 0; i < colm; i++) {
@@ -325,6 +336,10 @@ public class Task2 {
         System.out.println();
 
     }
+    
+    /**
+     * displays the game board
+     */
 
     public static void showBoard() {
 
