@@ -267,6 +267,11 @@ public class Task2 {
         showBoard();
 
     }
+    /**
+     * reveals first word chosen by the user
+     * @param boardPos  a hashmap of 2D array indexes as keys and words as values.
+     * @param firstInput the first position chosen by the user i.e 01
+     */
     public static void showFst(HashMap boardPos, String firstInput){
         int firstrowPos = Character.getNumericValue(firstInput.charAt(0));
         int firstcolmPos = Character.getNumericValue(firstInput.charAt(1));
@@ -282,11 +287,7 @@ public class Task2 {
             showBoard();
         
         }
-        
-        
-    
-    
-    
+ 
     
     }
 
