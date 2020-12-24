@@ -20,6 +20,8 @@ import java.util.Set;
 public class Task2 {
 
     // declaring static variables that will be used by functions
+    static String firstInput; 
+    static String secondInput; 
     static ArrayList<String> pos = new ArrayList<>();
     static int row;
     static int colm;
@@ -93,14 +95,15 @@ public class Task2 {
                  */
                 Scanner firstPos = new Scanner(System.in);
                 System.out.print("Enter first Position > ");
-                String firstInput = firstPos.nextLine();
+                 firstInput = firstPos.nextLine();
+                 showFst( boardPos,  firstInput);
 
                 /*
                     storing position of second word 
                  */
                 Scanner secondPos = new Scanner(System.in);
                 System.out.print("Enter Second Position > ");
-                String secondInput = secondPos.nextLine();
+                secondInput = secondPos.nextLine();
 
 //               displying words from chosen postions
                 reveal(boardPos, firstInput, secondInput);
@@ -241,6 +244,7 @@ public class Task2 {
             System.out.println("------------------------------");
 
             Board[firstrowPos][firstcolmPos] = (String) boardPos.get(firstInput);
+            showBoard();
             Board[secondrowPos][secondcolmPos] = (String) boardPos.get(secondInput);
 
             showBoard();
@@ -262,6 +266,28 @@ public class Task2 {
         }
         showBoard();
 
+    }
+    public static void showFst(HashMap boardPos, String firstInput){
+        int firstrowPos = Character.getNumericValue(firstInput.charAt(0));
+        int firstcolmPos = Character.getNumericValue(firstInput.charAt(1));
+        
+        
+        
+        if (boardPos.containsKey(firstInput)) {
+
+            System.out.println("\n" + "Your guesses....");
+            System.out.println("------------------------------");
+
+            Board[firstrowPos][firstcolmPos] = (String) boardPos.get(firstInput);
+            showBoard();
+        
+        }
+        
+        
+    
+    
+    
+    
     }
 
     /**
