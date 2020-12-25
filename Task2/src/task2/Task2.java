@@ -24,12 +24,14 @@ public class Task2 {
 
     
     static ArrayList<String> pos = new ArrayList<>();
+    static ArrayList<String> matchedWords = new ArrayList<>();
     
     static String[][] Board;
     static int row , colm;
     
     static boolean userQuit = false;
-    static int matches = 1;
+    static int matches = 0;
+    static int numOfTries = 0;
 
     // brdRow and brdColm are used to displays row and colm positions of the board
     static int brdRow = 0,brdColm = 0;
@@ -52,6 +54,7 @@ public class Task2 {
          * range [1, 2 , 3 ,4]
          */
         while (inValidInput) {
+            
             try {
                 level = getLeve();
 
@@ -86,8 +89,10 @@ public class Task2 {
         } catch (Exception e) {
             userQuit = true;
         }
+        
 
         while (!userQuit) {
+            
             try {
 
                 Scanner action = new Scanner(System.in);
@@ -104,8 +109,17 @@ public class Task2 {
                      */
                     Scanner firstPos = new Scanner(System.in);
                     System.out.print("Enter first Position > ");
+                    
                     firstInput = firstPos.nextLine();
+                    
+                    if(matchedWords.contains(firstInput)){
+                        System.out.println("Guess already made");
+                        
+                    
+                    
+                    }else{
                     showFst(boardPos, firstInput);
+                    numOfTries++;
 
                     /*
                     storing position of second word 
@@ -113,14 +127,18 @@ public class Task2 {
                     Scanner secondPos = new Scanner(System.in);
                     System.out.print("Enter Second Position > ");
                     secondInput = secondPos.nextLine();
+                    numOfTries++;
 
 //               displying words from chosen postions
                     reveal(boardPos, firstInput, secondInput);
                 }
+                }
 
             } catch (Exception e) {
-                System.out.print("Enter a valid Position > ");
+                System.out.println("Enter a valid Position  ");
             }
+            
+            gameEnd( matches);
 
         }
 
@@ -259,6 +277,8 @@ public class Task2 {
             showBoard();
             if (word1.equals(word2)) {
                 System.out.println("\n" + "Match found : " + matches + "\n");
+                matchedWords.add(firstInput);
+                matchedWords.add(secondInput);
 
                 matches++;
                 Board[firstrowPos][firstcolmPos] = (String) boardPos.get(firstInput) + "*";
@@ -354,6 +374,24 @@ public class Task2 {
         }
         brdRow = 0;
 
+    }
+    /**
+     * called when all words are matched, and displays the end results including number of attempts.
+     * @param matches is the number of matches a user has made
+     */
+    public static void gameEnd(int matches){
+        
+        int maxMatches = (row * colm) / 2;
+        
+        if (matches > maxMatches ){
+        
+            System.out.println("\n" + "****** All Matches Found *******" + "\n");
+            System.out.println("Number of Tries : " + numOfTries + "\n");
+            userQuit = true;
+        }
+    
+    
+    
     }
 
 }
