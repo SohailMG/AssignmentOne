@@ -20,21 +20,21 @@ import java.util.Set;
 public class Task2 {
 
     // declaring static variables that will be used by functions
-    static String firstInput,secondInput,makeGuess;
+    static String firstInput, secondInput, makeGuess;
 
-    
     static ArrayList<String> pos = new ArrayList<>();
     static ArrayList<String> matchedWords = new ArrayList<>();
-    
+
     static String[][] Board;
-    static int row , colm;
-    
+    static int row, colm;
+    static String activeFile;
+
     static boolean userQuit = false;
     static int matches = 0;
     static int numOfTries = 0;
 
     // brdRow and brdColm are used to displays row and colm positions of the board
-    static int brdRow = 0,brdColm = 0;
+    static int brdRow = 0, brdColm = 0;
 
     public static void main(String[] args) {
 
@@ -54,7 +54,7 @@ public class Task2 {
          * range [1, 2 , 3 ,4]
          */
         while (inValidInput) {
-            
+
             try {
                 level = getLeve();
 
@@ -89,10 +89,9 @@ public class Task2 {
         } catch (Exception e) {
             userQuit = true;
         }
-        
 
         while (!userQuit) {
-            
+
             try {
 
                 Scanner action = new Scanner(System.in);
@@ -109,36 +108,34 @@ public class Task2 {
                      */
                     Scanner firstPos = new Scanner(System.in);
                     System.out.print("Enter first Position > ");
-                    
-                    firstInput = firstPos.nextLine();
-                    
-                    if(matchedWords.contains(firstInput)){
-                        System.out.println("Guess already made");
-                        
-                    
-                    
-                    }else{
-                    showFst(boardPos, firstInput);
-                    numOfTries++;
 
-                    /*
+                    firstInput = firstPos.nextLine();
+
+                    if (matchedWords.contains(firstInput)) {
+                        System.out.println("Guess already made");
+
+                    } else {
+                        showFst(boardPos, firstInput);
+
+
+                        /*
                     storing position of second word 
-                     */
-                    Scanner secondPos = new Scanner(System.in);
-                    System.out.print("Enter Second Position > ");
-                    secondInput = secondPos.nextLine();
-                    numOfTries++;
+                         */
+                        Scanner secondPos = new Scanner(System.in);
+                        System.out.print("Enter Second Position > ");
+                        secondInput = secondPos.nextLine();
+                        numOfTries++;
 
 //               displying words from chosen postions
-                    reveal(boardPos, firstInput, secondInput);
-                }
+                        reveal(boardPos, firstInput, secondInput);
+                    }
                 }
 
             } catch (Exception e) {
                 System.out.println("Enter a valid Position  ");
             }
-            
-            gameEnd( matches);
+
+            gameEnd(matches);
 
         }
 
@@ -154,6 +151,10 @@ public class Task2 {
      */
     public static ArrayList readFile(int level) {
 
+        String small = System.getProperty("user.dir") + File.separator + "small.txt";
+        String medium = System.getProperty("user.dir") + File.separator + "medium.txt";
+        String large = System.getProperty("user.dir") + File.separator + "large.txt";
+
         ArrayList<String> words = new ArrayList<>();
         ArrayList<String> wPairs = new ArrayList<>();
 
@@ -167,17 +168,20 @@ public class Task2 {
                 case 1:
                     row = 4;
                     colm = 4;
-                    f = new File("small.txt");
+                    f = new File(small);
+                    activeFile = "small";
                     break;
                 case 2:
-                    row = 4;
-                    colm = 8;
-                    f = new File("medium.txt");
+                    row = 5;
+                    colm = 7;
+                    f = new File(medium);
+                    activeFile = "medium";
                     break;
                 case 3:
                     row = 8;
                     colm = 8;
-                    f = new File("large.txt");
+                    f = new File(large);
+                    activeFile = "large";
                     break;
                 case 4:
 
@@ -193,9 +197,18 @@ public class Task2 {
 
                 words.add(s.nextLine());
 
-                wPairs.add((words.get(item)));
-                wPairs.add((words.get(item)));
+                switch (activeFile) {
 
+                    case "small":
+                        addSpace2Small(words, item, wPairs);
+                        break;
+                    case "large":
+                        addSpace2Large(words, item, wPairs);
+                        break;
+                    default:
+                        break;
+
+                }
                 item++;
             }
 
@@ -204,6 +217,67 @@ public class Task2 {
         }
         return wPairs;
 
+    }
+
+    public static void addSpace2Small(ArrayList<String> words, int item, ArrayList<String> wPairs) {
+        // this is for better visuals. adding white space for words less than 8 length
+        switch (words.get(item).length()) {
+            case 5:
+                wPairs.add((words.get(item)) + "   ");
+                wPairs.add((words.get(item)) + "   ");
+                break;
+            case 6:
+                wPairs.add((words.get(item)) + "  ");
+                wPairs.add((words.get(item)) + "  ");
+                break;
+            case 7:
+                wPairs.add((words.get(item)) + " ");
+                wPairs.add((words.get(item)) + " ");
+                break;
+            default:
+                wPairs.add((words.get(item)));
+                wPairs.add((words.get(item)));
+                break;
+        }
+    }
+
+    public static void addSpace2Large(ArrayList<String> words, int item, ArrayList<String> wPairs) {
+        // this is for better visuals. adding white space for words less than 8 length
+        switch (words.get(item).length()) {
+            case 4:
+                wPairs.add((words.get(item)) + "        ");
+                wPairs.add((words.get(item)) + "        ");
+                break;
+            case 5:
+                wPairs.add((words.get(item)) + "       ");
+                wPairs.add((words.get(item)) + "       ");
+                break;
+            case 6:
+                wPairs.add((words.get(item)) + "      ");
+                wPairs.add((words.get(item)) + "      ");
+                break;
+            case 7:
+                wPairs.add((words.get(item)) + "     ");
+                wPairs.add((words.get(item)) + "     ");
+                break;
+            case 8:
+                wPairs.add((words.get(item)) + "    ");
+                wPairs.add((words.get(item)) + "    ");
+                break;
+            case 9:
+                wPairs.add((words.get(item)) + "   ");
+                wPairs.add((words.get(item)) + "   ");
+                break;
+            case 10:
+                wPairs.add((words.get(item)) + "  ");
+                wPairs.add((words.get(item)) + "  ");
+                break;
+
+            default:
+                wPairs.add((words.get(item)));
+                wPairs.add((words.get(item)));
+                break;
+        }
     }
 
     /**
@@ -215,8 +289,22 @@ public class Task2 {
 
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < colm; j++) {
-                Board[i][j] = "XXXXXX";
-                pos.add(i + "" + j);
+                switch (activeFile) {
+                    case "small":
+                        Board[i][j] = "XXXXXXXX";
+                        pos.add(i + "" + j);
+                        break;
+                    case "medium":
+                        Board[i][j] = "XXXXXXXXXXX";
+                        pos.add(i + "" + j);
+                        break;
+                    case "large":
+                        Board[i][j] = "XXXXXXXXXXXX";
+                        pos.add(i + "" + j);
+                        break;
+                    default:
+                        break;
+                }
 
             }
 
@@ -229,8 +317,8 @@ public class Task2 {
     /**
      * creates a hash map of positions as keys and words as values
      *
-     * @param pairsArr
-     * @param pos
+     * @param pairsArr an array of words in pairs
+     * @param pos index positions of 2D array
      * @return returns a hash map
      */
     public static HashMap creatPositions(ArrayList pairsArr, ArrayList pos) {
@@ -276,19 +364,38 @@ public class Task2 {
 
             showBoard();
             if (word1.equals(word2)) {
-                System.out.println("\n" + "Match found : " + matches + "\n");
+                System.out.println("\n" + "Match found  " + "\n");
+
                 matchedWords.add(firstInput);
                 matchedWords.add(secondInput);
 
                 matches++;
-                Board[firstrowPos][firstcolmPos] = (String) boardPos.get(firstInput) + "*";
-                Board[secondrowPos][secondcolmPos] = (String) boardPos.get(secondInput) + "*";
+                Board[firstrowPos][firstcolmPos] = (String) boardPos.get(firstInput);
+                Board[secondrowPos][secondcolmPos] = (String) boardPos.get(secondInput);
             } else {
                 System.out.println("\n" + "No match found...." + "\n");
-                Board[firstrowPos][firstcolmPos] = "XXXXXX";
-                Board[secondrowPos][secondcolmPos] = "XXXXXX";
+
+                switch (activeFile) {
+
+                    case "small":
+                        Board[firstrowPos][firstcolmPos] =   "XXXXXXXX";
+                        Board[secondrowPos][secondcolmPos] = "XXXXXXXX";
+                        break;
+                    case "medium":
+                        Board[firstrowPos][firstcolmPos] =   "XXXXXXXXXX";
+                        Board[secondrowPos][secondcolmPos] = "XXXXXXXXXX";
+                        break;
+                    case "large":
+                        Board[firstrowPos][firstcolmPos] =   "XXXXXXXXXXXX";
+                        Board[secondrowPos][secondcolmPos] = "XXXXXXXXXXXX";
+                        break;
+                    default:
+                        break;
+
+                }
 
             }
+            System.out.println("\n" + "Number of Guesses  " + numOfTries + "\n");
         } else {
             System.out.println(firstInput + " is out of range");
         }
@@ -334,6 +441,9 @@ public class Task2 {
         System.out.println("               Master       > 3     ");
         System.out.println("              Give up       > 4     ");
 
+        System.out.println("\n" + "Words can be revealed by choosing a row and column for instance to get the first square on the top "
+                + "\n" + "left you would enter  01 without any spaces" + "\n");
+
         System.out.print("\n" + "Choose Difficulty > ");
 
         Scanner lvl = new Scanner(System.in);
@@ -342,9 +452,10 @@ public class Task2 {
         return levelChosen;
 
     }
-    
+
     /**
      * displays column positions at the top of gameboard
+     *
      * @param colm is the number of columns a gameboard has
      */
     public static void showColmPos(int colm) {
@@ -356,11 +467,10 @@ public class Task2 {
         System.out.println();
 
     }
-    
+
     /**
      * displays the game board
      */
-
     public static void showBoard() {
 
         showColmPos(colm);
@@ -375,23 +485,24 @@ public class Task2 {
         brdRow = 0;
 
     }
+
     /**
-     * called when all words are matched, and displays the end results including number of attempts.
+     * called when all words are matched, and displays the end results including
+     * number of attempts.
+     *
      * @param matches is the number of matches a user has made
      */
-    public static void gameEnd(int matches){
-        
+    public static void gameEnd(int matches) {
+
         int maxMatches = (row * colm) / 2;
-        
-        if (matches > maxMatches ){
-        
+
+        if (matches > maxMatches) {
+
             System.out.println("\n" + "****** All Matches Found *******" + "\n");
             System.out.println("Number of Tries : " + numOfTries + "\n");
             userQuit = true;
         }
-    
-    
-    
+
     }
 
 }

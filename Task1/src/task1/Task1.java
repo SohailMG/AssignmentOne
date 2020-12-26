@@ -9,6 +9,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Task1 {
+   static  File f ;
+   static Scanner fileReader;
 
     public static void main(String[] args) {
 
@@ -21,14 +23,14 @@ public class Task1 {
             'q', 'Q', 'r', 'R', 's', 'S', 't', 'T', 'v', 'V', 'w', 'W', 'x', 'X', 'z', 'Z'};
 
 //       file object of encrypted file 
-        File f = new File(dataFile);
+         f = new File(dataFile);
 
         /**
          * try and catch block to catch filenotfound exception.
         */
         try {
 //          creating a filereader scanner object
-            Scanner fileReader = new Scanner(f);
+             fileReader = new Scanner(f);
 
             while (fileReader.hasNextLine()) {
 
@@ -127,11 +129,16 @@ public class Task1 {
 
                     }
 
+            
                 }
 
             }
+            
         } catch (FileNotFoundException ex) {
             System.out.println("File doesn't exit");
+        }finally{
+            fileReader.close();
+        
         }
 
     }
