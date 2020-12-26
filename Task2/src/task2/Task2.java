@@ -30,8 +30,8 @@ public class Task2 {
     static String activeFile;
 
     static boolean userQuit = false;
-    static int matches = 0;
-    static int numOfTries = 0;
+    static int matches = 0,numOfTries = 0;
+    
 
     // brdRow and brdColm are used to displays row and colm positions of the board
     static int brdRow = 0, brdColm = 0;
@@ -67,7 +67,7 @@ public class Task2 {
                     inValidInput = false;
 
                 } else {
-                    System.out.println("\n" + "-------------------------------------");
+                    System.out.println("\n");
                     System.out.println(level + " is out of range choose 1 2 3 or 4  " + "\n");
 
                 }
@@ -79,6 +79,14 @@ public class Task2 {
         }
         HashMap boardPos = null;
 
+        /**
+         * try and catch block.
+         * reading file data into an array of pairs.
+         * shuffling the array each run to randomise elements.
+         * calling fillBoard() to display Game Board.
+         * creating a hashmap of 2d array indexes as keys and file words as values
+         * 
+         */
         try {
 
             ArrayList pairsArr = readFile(level);
@@ -95,7 +103,7 @@ public class Task2 {
             try {
 
                 Scanner action = new Scanner(System.in);
-                System.out.print("Make a Guess 'yes' or 'no' ?  >  ");
+                System.out.print("\n" + " Make a Guess 'yes' or 'no' ?  >  ");
                 makeGuess = action.nextLine();
 
                 if (makeGuess.equals("no")) {
@@ -107,12 +115,12 @@ public class Task2 {
                     storing position of first word 
                      */
                     Scanner firstPos = new Scanner(System.in);
-                    System.out.print("Enter first Position > ");
+                    System.out.print("\n" + " Enter first Position > ");
 
                     firstInput = firstPos.nextLine();
 
                     if (matchedWords.contains(firstInput)) {
-                        System.out.println("Guess already made");
+                        System.out.println("\n" + "Word already Matched try again");
 
                     } else {
                         showFst(boardPos, firstInput);
@@ -122,7 +130,7 @@ public class Task2 {
                     storing position of second word 
                          */
                         Scanner secondPos = new Scanner(System.in);
-                        System.out.print("Enter Second Position > ");
+                        System.out.print("\n" + "Enter Second Position > ");
                         secondInput = secondPos.nextLine();
                         numOfTries++;
 
@@ -132,7 +140,7 @@ public class Task2 {
                 }
 
             } catch (Exception e) {
-                System.out.println("Enter a valid Position  ");
+                System.out.println("\n" + "Invalid entry try again ");
             }
 
             gameEnd(matches);
@@ -172,8 +180,8 @@ public class Task2 {
                     activeFile = "small";
                     break;
                 case 2:
-                    row = 5;
-                    colm = 7;
+                    row = 6;
+                    colm = 6;
                     f = new File(medium);
                     activeFile = "medium";
                     break;
@@ -200,10 +208,13 @@ public class Task2 {
                 switch (activeFile) {
 
                     case "small":
-                        addSpace2Small(words, item, wPairs);
+                        visuals.addSpace2Small(words, item, wPairs);
+                        break;
+                    case "medium":
+                        visuals.addSpace2Medium(words, item, wPairs);
                         break;
                     case "large":
-                        addSpace2Large(words, item, wPairs);
+                        visuals.addSpace2Large(words, item, wPairs);
                         break;
                     default:
                         break;
@@ -219,66 +230,6 @@ public class Task2 {
 
     }
 
-    public static void addSpace2Small(ArrayList<String> words, int item, ArrayList<String> wPairs) {
-        // this is for better visuals. adding white space for words less than 8 length
-        switch (words.get(item).length()) {
-            case 5:
-                wPairs.add((words.get(item)) + "   ");
-                wPairs.add((words.get(item)) + "   ");
-                break;
-            case 6:
-                wPairs.add((words.get(item)) + "  ");
-                wPairs.add((words.get(item)) + "  ");
-                break;
-            case 7:
-                wPairs.add((words.get(item)) + " ");
-                wPairs.add((words.get(item)) + " ");
-                break;
-            default:
-                wPairs.add((words.get(item)));
-                wPairs.add((words.get(item)));
-                break;
-        }
-    }
-
-    public static void addSpace2Large(ArrayList<String> words, int item, ArrayList<String> wPairs) {
-        // this is for better visuals. adding white space for words less than 8 length
-        switch (words.get(item).length()) {
-            case 4:
-                wPairs.add((words.get(item)) + "        ");
-                wPairs.add((words.get(item)) + "        ");
-                break;
-            case 5:
-                wPairs.add((words.get(item)) + "       ");
-                wPairs.add((words.get(item)) + "       ");
-                break;
-            case 6:
-                wPairs.add((words.get(item)) + "      ");
-                wPairs.add((words.get(item)) + "      ");
-                break;
-            case 7:
-                wPairs.add((words.get(item)) + "     ");
-                wPairs.add((words.get(item)) + "     ");
-                break;
-            case 8:
-                wPairs.add((words.get(item)) + "    ");
-                wPairs.add((words.get(item)) + "    ");
-                break;
-            case 9:
-                wPairs.add((words.get(item)) + "   ");
-                wPairs.add((words.get(item)) + "   ");
-                break;
-            case 10:
-                wPairs.add((words.get(item)) + "  ");
-                wPairs.add((words.get(item)) + "  ");
-                break;
-
-            default:
-                wPairs.add((words.get(item)));
-                wPairs.add((words.get(item)));
-                break;
-        }
-    }
 
     /**
      * displays game board with hidden words
@@ -382,8 +333,8 @@ public class Task2 {
                         Board[secondrowPos][secondcolmPos] = "XXXXXXXX";
                         break;
                     case "medium":
-                        Board[firstrowPos][firstcolmPos] =   "XXXXXXXXXX";
-                        Board[secondrowPos][secondcolmPos] = "XXXXXXXXXX";
+                        Board[firstrowPos][firstcolmPos] =   "XXXXXXXXXXX";
+                        Board[secondrowPos][secondcolmPos] = "XXXXXXXXXXX";
                         break;
                     case "large":
                         Board[firstrowPos][firstcolmPos] =   "XXXXXXXXXXXX";
@@ -504,5 +455,126 @@ public class Task2 {
         }
 
     }
+    
+    
+      
+
+}/**
+ * has three functions to add white space to words that are less 
+ * than length of the biggest word in a file
+ */
+ class visuals{
+     
+     /**
+      * adds white space to words in small.txt file  
+      */
+    public static void addSpace2Small(ArrayList<String> words, int item, ArrayList<String> wPairs) {
+        // this is for better visuals. adding white space for words less than 8 length
+        switch (words.get(item).length()) {
+            case 5:
+                wPairs.add((words.get(item)) + "   ");
+                wPairs.add((words.get(item)) + "   ");
+                break;
+            case 6:
+                wPairs.add((words.get(item)) + "  ");
+                wPairs.add((words.get(item)) + "  ");
+                break;
+            case 7:
+                wPairs.add((words.get(item)) + " ");
+                wPairs.add((words.get(item)) + " ");
+                break;
+            default:
+                wPairs.add((words.get(item)));
+                wPairs.add((words.get(item)));
+                break;
+        }
+    }
+    /**
+      * adds white space to words in large.txt file  
+      */
+    public static void addSpace2Large(ArrayList<String> words, int item, ArrayList<String> wPairs) {
+        // this is for better visuals. adding white space for words less than 8 length
+        switch (words.get(item).length()) {
+            case 4:
+                wPairs.add((words.get(item)) + "        ");
+                wPairs.add((words.get(item)) + "        ");
+                break;
+            case 5:
+                wPairs.add((words.get(item)) + "       ");
+                wPairs.add((words.get(item)) + "       ");
+                break;
+            case 6:
+                wPairs.add((words.get(item)) + "      ");
+                wPairs.add((words.get(item)) + "      ");
+                break;
+            case 7:
+                wPairs.add((words.get(item)) + "     ");
+                wPairs.add((words.get(item)) + "     ");
+                break;
+            case 8:
+                wPairs.add((words.get(item)) + "    ");
+                wPairs.add((words.get(item)) + "    ");
+                break;
+            case 9:
+                wPairs.add((words.get(item)) + "   ");
+                wPairs.add((words.get(item)) + "   ");
+                break;
+            case 10:
+                wPairs.add((words.get(item)) + "  ");
+                wPairs.add((words.get(item)) + "  ");
+                break;
+
+            default:
+                wPairs.add((words.get(item)));
+                wPairs.add((words.get(item)));
+                break;
+        }
+    }
+    /**
+      * adds white space to words in medium.txt file  
+      */
+    public static void addSpace2Medium(ArrayList<String> words, int item, ArrayList<String> wPairs) {
+        // this is for better visuals. adding white space for words less than 8 length
+        switch (words.get(item).length()) {
+            case 4:
+                wPairs.add((words.get(item)) + "       ");
+                wPairs.add((words.get(item)) + "       ");
+                break;
+            case 5:
+                wPairs.add((words.get(item)) + "      ");
+                wPairs.add((words.get(item)) + "      ");
+                break;
+            case 6:
+                wPairs.add((words.get(item)) + "     ");
+                wPairs.add((words.get(item)) + "     ");
+                break;
+            case 7:
+                wPairs.add((words.get(item)) + "    ");
+                wPairs.add((words.get(item)) + "    ");
+                break;
+            case 8:
+                wPairs.add((words.get(item)) + "   ");
+                wPairs.add((words.get(item)) + "   ");
+                break;
+            case 9:
+                wPairs.add((words.get(item)) + "  ");
+                wPairs.add((words.get(item)) + "  ");
+                break;
+            case 10:
+                wPairs.add((words.get(item)) + " ");
+                wPairs.add((words.get(item)) + " ");
+                break;
+
+            default:
+                wPairs.add((words.get(item)));
+                wPairs.add((words.get(item)));
+                break;
+        }
+    }
+
+
+
+
+
 
 }
