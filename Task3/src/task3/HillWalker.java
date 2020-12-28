@@ -65,9 +65,9 @@ class Start extends State {
 
             System.out.println("           >MODE<             " + "\n" + ">");
             scan = new Scanner(System.in);
-            String mood = scan.next();
+            String btn = scan.next();
 
-            switch (mood) {
+            switch (btn.toUpperCase()) {
                 case "MODE":
                     current = altimeter;
                     return;
@@ -113,7 +113,7 @@ class Time extends State {
             scan = new Scanner(System.in);
             String btn = scan.next();
 
-            switch (btn) {
+            switch (btn.toUpperCase()) {
 
                 case "SET":
                     current = setHours;
@@ -155,7 +155,7 @@ class SetHours extends State {
             scan = new Scanner(System.in);
             String btn = scan.next();
 
-            switch (btn) {
+            switch (btn.toUpperCase()) {
 
                 case "SET":
                     hrs++;
@@ -202,7 +202,7 @@ class Altimeter extends State {
             scan = new Scanner(System.in);
             String btn = scan.next();
 
-            switch (btn) {
+            switch (btn.toUpperCase()) {
 
                 case "SET":
                     current = altimeter;
@@ -245,8 +245,9 @@ class SetMins extends State {
 
             scan = new Scanner(System.in);
             String btn = scan.next();
-
-            switch (btn) {
+            
+            
+            switch (btn.toUpperCase()) {
 
                 case "SET":
                     Mins++;
