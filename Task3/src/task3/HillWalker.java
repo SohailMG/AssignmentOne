@@ -268,7 +268,7 @@ class SetMins extends State {
 
 }
 
-public class Task3 {
+public class HillWalker {
 
     public static void main(String[] args) {
 

@@ -8,7 +8,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Task1 {
+public class Decipher {
    static  File f ;
    static Scanner fileReader;
 

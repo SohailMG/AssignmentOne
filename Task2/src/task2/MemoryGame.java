@@ -17,17 +17,18 @@ import java.util.Set;
  * @author Sohail Gsais
  *
  */
-public class Task2 {
+public class MemoryGame {
 
-    // declaring static variables that will be used by functions
-    static String firstInput, secondInput, makeGuess;
+    // declaring String vaariables that will store game data 
+    static String firstInput, secondInput, makeGuess,activeFile;
 
+    // pos list stores the 2d array indexes
+    // matchedWords stores the position of all matched words
     static ArrayList<String> pos = new ArrayList<>();
     static ArrayList<String> matchedWords = new ArrayList<>();
 
     static String[][] Board;
     static int row, colm;
-    static String activeFile;
 
     static boolean userQuit = false;
     static int matches = 0,numOfTries = 0;
