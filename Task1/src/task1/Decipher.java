@@ -17,28 +17,28 @@ public class Decipher {
 
         String dataFile = System.getProperty("user.dir") + File.separator + "datafile.txt";
 
-//        array of both vowels and consosntants 
+        // array of both vowels and consosntants 
         char[] vowels = {' ', 'a', 'A', 'e', 'E', 'i', 'I', 'o', 'O', 'u', 'U', 'y', 'Y'};
         char[] consonants = {' ', 'b', 'B', 'c', 'C', 'd', 'D', 'f', 'F', 'g', 'G', 'h', 'H',
             'j', 'J', 'k', 'K', 'l', 'L', 'm', 'M', 'n', 'N', 'p', 'P',
             'q', 'Q', 'r', 'R', 's', 'S', 't', 'T', 'v', 'V', 'w', 'W', 'x', 'X', 'z', 'Z'};
 
-//       file object of encrypted file 
+        // file object of encrypted file 
         f = new File(dataFile);
 
         /**
          * try and catch block to catch filenotfound exception.
          */
         try {
-//          creating a filereader scanner object
+            // creating a filereader scanner object
             fileReader = new Scanner(f);
 
             while (fileReader.hasNextLine()) {
 
-//              storing encrypted file content into a string variable 
+                // storing encrypted file content into a string variable 
                 String encryption = fileReader.nextLine();
 
-//              regular expression to extract digits from a given 
+                // regular expression to extract digits from a given 
                 String regex = "\\d+";
 
                 System.out.println("");
@@ -53,7 +53,6 @@ public class Decipher {
 
                     /*
                         checking if a character is a C,V or a Space
-                        
                      */
                     switch (c) {
                         case 'C':
@@ -71,7 +70,6 @@ public class Decipher {
                             try {
                                 // calling extractNums to get numbers following by char V
                                 extractNums(encryption, i, regex, vowels);
-     
 
                             } catch (StringIndexOutOfBoundsException siobe) {
                                 // handleExce is called to handle exception
@@ -110,7 +108,7 @@ public class Decipher {
      * @param arr a vowels or consonants array passed
      */
     public static void handleExce(String encryption, char[] arr) {
-        
+
         char num = encryption.charAt(encryption.length() - 2);
         if (num == 'C') {
             char d = encryption.charAt(encryption.length() - 1);

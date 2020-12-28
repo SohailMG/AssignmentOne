@@ -20,7 +20,7 @@ import java.util.Set;
 public class MemoryGame {
 
     // declaring String vaariables that will store game data 
-    static String firstInput, secondInput, makeGuess,activeFile;
+    static String firstInput, secondInput, makeGuess, activeFile;
 
     // pos list stores the 2d array indexes
     // matchedWords stores the position of all matched words
@@ -31,8 +31,8 @@ public class MemoryGame {
     static int row, colm;
 
     static boolean userQuit = false;
-    static int matches = 0,numOfTries = 0;
-    
+    static int matches = 0, numOfTries = 0;
+    static int firstrowPos, firstcolmPos, secondrowPos, secondcolmPos;
 
     // brdRow and brdColm are used to displays row and colm positions of the board
     static int brdRow = 0, brdColm = 0;
@@ -81,12 +81,11 @@ public class MemoryGame {
         HashMap boardPos = null;
 
         /**
-         * try and catch block.
-         * reading file data into an array of pairs.
-         * shuffling the array each run to randomise elements.
-         * calling fillBoard() to display Game Board.
-         * creating a hashmap of 2d array indexes as keys and file words as values
-         * 
+         * try and catch block. reading file data into an array of pairs.
+         * shuffling the array each run to randomise elements. calling
+         * fillBoard() to display Game Board. creating a hashmap of 2d array
+         * indexes as keys and file words as values
+         *
          */
         try {
 
@@ -119,13 +118,15 @@ public class MemoryGame {
                     System.out.print("\n" + " Enter first Position > ");
 
                     firstInput = firstPos.nextLine();
+                    if (!(boardPos.containsKey(firstInput))) {
+                        System.out.println("Out of Range...");
+                        hideWords(firstrowPos, firstcolmPos, secondrowPos, secondcolmPos);
 
-                    if (matchedWords.contains(firstInput)) {
+                    } else if (matchedWords.contains(firstInput)) {
                         System.out.println("\n" + "Word already Matched try again");
 
                     } else {
                         showFst(boardPos, firstInput);
-
 
                         /*
                     storing position of second word 
@@ -133,10 +134,16 @@ public class MemoryGame {
                         Scanner secondPos = new Scanner(System.in);
                         System.out.print("\n" + "Enter Second Position > ");
                         secondInput = secondPos.nextLine();
-                        numOfTries++;
+                        if (!(boardPos.containsKey(secondInput))) {
+                            System.out.println("\n" + secondInput + " is Out of Range..." + "\n");
+                            hideWords(firstrowPos, firstcolmPos, secondrowPos, secondcolmPos);
 
-//               displying words from chosen postions
-                        reveal(boardPos, firstInput, secondInput);
+                        } else {
+                            numOfTries++;
+
+                            //  displying words from chosen postions
+                            reveal(boardPos, firstInput, secondInput);
+                        }
                     }
                 }
 
@@ -144,6 +151,7 @@ public class MemoryGame {
                 System.out.println("\n" + "Invalid entry try again ");
             }
 
+            // gameEnd is called once user matches all words
             gameEnd(matches);
 
         }
@@ -231,7 +239,6 @@ public class MemoryGame {
 
     }
 
-
     /**
      * displays game board with hidden words
      */
@@ -296,11 +303,11 @@ public class MemoryGame {
      */
     public static void reveal(HashMap boardPos, String firstInput, String secondInput) {
 
-        int firstrowPos = Character.getNumericValue(firstInput.charAt(0));
-        int firstcolmPos = Character.getNumericValue(firstInput.charAt(1));
+        firstrowPos = Character.getNumericValue(firstInput.charAt(0));
+        firstcolmPos = Character.getNumericValue(firstInput.charAt(1));
 
-        int secondrowPos = Character.getNumericValue(secondInput.charAt(0));
-        int secondcolmPos = Character.getNumericValue(secondInput.charAt(1));
+        secondrowPos = Character.getNumericValue(secondInput.charAt(0));
+        secondcolmPos = Character.getNumericValue(secondInput.charAt(1));
 
         String word1 = (String) boardPos.get(firstInput);
         String word2 = (String) boardPos.get(secondInput);
@@ -311,7 +318,7 @@ public class MemoryGame {
             System.out.println("------------------------------");
 
             Board[firstrowPos][firstcolmPos] = (String) boardPos.get(firstInput);
-            showBoard();
+//            showBoard();
             Board[secondrowPos][secondcolmPos] = (String) boardPos.get(secondInput);
 
             showBoard();
@@ -327,24 +334,7 @@ public class MemoryGame {
             } else {
                 System.out.println("\n" + "No match found...." + "\n");
 
-                switch (activeFile) {
-
-                    case "small":
-                        Board[firstrowPos][firstcolmPos] =   "XXXXXXXX";
-                        Board[secondrowPos][secondcolmPos] = "XXXXXXXX";
-                        break;
-                    case "medium":
-                        Board[firstrowPos][firstcolmPos] =   "XXXXXXXXXXX";
-                        Board[secondrowPos][secondcolmPos] = "XXXXXXXXXXX";
-                        break;
-                    case "large":
-                        Board[firstrowPos][firstcolmPos] =   "XXXXXXXXXXXX";
-                        Board[secondrowPos][secondcolmPos] = "XXXXXXXXXXXX";
-                        break;
-                    default:
-                        break;
-
-                }
+                hideWords(firstrowPos, firstcolmPos, secondrowPos, secondcolmPos);
 
             }
             System.out.println("\n" + "Number of Guesses  " + numOfTries + "\n");
@@ -353,6 +343,36 @@ public class MemoryGame {
         }
         showBoard();
 
+    }
+
+    /**
+     * hides the words with Xs
+     *
+     * @param firstrowPos row of first word chosen
+     * @param firstcolmPos column of first word chosen
+     * @param secondrowPos row of second word chosen
+     * @param secondcolmPos column of second word chosen
+     */
+    public static void hideWords(int firstrowPos, int firstcolmPos, int secondrowPos, int secondcolmPos) {
+
+        switch (activeFile) {
+
+            case "small":
+                Board[firstrowPos][firstcolmPos] = "XXXXXXXX";
+                Board[secondrowPos][secondcolmPos] = "XXXXXXXX";
+                break;
+            case "medium":
+                Board[firstrowPos][firstcolmPos] = "XXXXXXXXXXX";
+                Board[secondrowPos][secondcolmPos] = "XXXXXXXXXXX";
+                break;
+            case "large":
+                Board[firstrowPos][firstcolmPos] = "XXXXXXXXXXXX";
+                Board[secondrowPos][secondcolmPos] = "XXXXXXXXXXXX";
+                break;
+            default:
+                break;
+
+        }
     }
 
     /**
@@ -368,7 +388,7 @@ public class MemoryGame {
 
         if (boardPos.containsKey(firstInput)) {
 
-            System.out.println("\n" + "Your guesses...." + "\n");
+            System.out.println("\n" + "Your first Guess...." + "\n");
 
             Board[firstrowPos][firstcolmPos] = (String) boardPos.get(firstInput);
             showBoard();
@@ -413,7 +433,20 @@ public class MemoryGame {
     public static void showColmPos(int colm) {
 
         for (int i = 0; i < colm; i++) {
-            System.out.print("   " + i + "     ");
+
+            switch (activeFile) {
+                case "small":
+                    System.out.print("     " + i + "     ");
+                    break;
+                case "medium":
+                    System.out.print("       " + i + "     ");
+                    break;
+                case "large":
+                    System.out.print("        " + i + "     ");
+                    break;
+                default:
+                    break;
+            }
 
         }
         System.out.println();
@@ -424,7 +457,7 @@ public class MemoryGame {
      * displays the game board
      */
     public static void showBoard() {
-
+        System.out.println("-----------------------------------------");
         showColmPos(colm);
         for (String[] r : Board) {
             System.out.print(brdRow);
@@ -434,6 +467,7 @@ public class MemoryGame {
             brdRow++;
             System.out.println();
         }
+        System.out.println("-----------------------------------------");
         brdRow = 0;
 
     }
@@ -448,27 +482,27 @@ public class MemoryGame {
 
         int maxMatches = (row * colm) / 2;
 
-        if (matches > maxMatches) {
+        if (matches == maxMatches) {
 
             System.out.println("\n" + "****** All Matches Found *******" + "\n");
             System.out.println("Number of Tries : " + numOfTries + "\n");
+            System.out.println("Matches Made: " + matches + "\n");
             userQuit = true;
         }
 
     }
-    
-    
-      
 
-}/**
- * has three functions to add white space to words that are less 
- * than length of the biggest word in a file
+}
+
+/**
+ * has three functions to add white space to words that are less than length of
+ * the biggest word in a file
  */
- class visuals{
-     
-     /**
-      * adds white space to words in small.txt file  
-      */
+class visuals {
+
+    /**
+     * adds white space to words in small.txt file
+     */
     public static void addSpace2Small(ArrayList<String> words, int item, ArrayList<String> wPairs) {
         // this is for better visuals. adding white space for words less than 8 length
         switch (words.get(item).length()) {
@@ -490,9 +524,10 @@ public class MemoryGame {
                 break;
         }
     }
+
     /**
-      * adds white space to words in large.txt file  
-      */
+     * adds white space to words in large.txt file
+     */
     public static void addSpace2Large(ArrayList<String> words, int item, ArrayList<String> wPairs) {
         // this is for better visuals. adding white space for words less than 8 length
         switch (words.get(item).length()) {
@@ -531,9 +566,10 @@ public class MemoryGame {
                 break;
         }
     }
+
     /**
-      * adds white space to words in medium.txt file  
-      */
+     * adds white space to words in medium.txt file
+     */
     public static void addSpace2Medium(ArrayList<String> words, int item, ArrayList<String> wPairs) {
         // this is for better visuals. adding white space for words less than 8 length
         switch (words.get(item).length()) {
@@ -572,10 +608,5 @@ public class MemoryGame {
                 break;
         }
     }
-
-
-
-
-
 
 }
