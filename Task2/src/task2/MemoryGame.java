@@ -132,7 +132,6 @@ public class MemoryGame {
                         // revealing first word chosen by user
                         showFst(boardPos, firstInput);
 
-                    
                         // second input validation
                         Scanner secondPos = new Scanner(System.in);
                         System.out.print("\n" + "Enter Second Position > ");
@@ -142,12 +141,15 @@ public class MemoryGame {
                             System.out.println("\n" + secondInput + "  Invalid Entry...try again" + "\n");
                             hideWords(firstrowPos, firstcolmPos, secondrowPos, secondcolmPos);
 
-                        // checking if user chooses same position twice
-                        }else if (firstInput.equals(secondInput)){
+                            // checking if user chooses same position twice
+                        } else if (firstInput.equals(secondInput)) {
                             System.out.println("\n" + "Cannot choose same position again...." + "\n");
                             hideWords(firstrowPos, firstcolmPos, secondrowPos, secondcolmPos);
-                        
-                        
+
+                            // checking if word has already been matched
+                        } else if (matchedWords.contains(secondInput)) {
+                            resetBoard();
+
                         } else {
                             numOfTries++;
 
@@ -166,6 +168,33 @@ public class MemoryGame {
 
         }
 
+    }
+
+    /**
+     * called when second input has already been matched.
+     * allows user to retry and hides their first guess
+     */
+    public static void resetBoard() {
+        System.out.println("\n" + "Word already Matched try again");
+        int r = Character.getNumericValue(firstInput.charAt(0));
+        int c = Character.getNumericValue(firstInput.charAt(1));
+        switch (activeFile) {
+            
+            case "small":
+                Board[r][c] = "XXXXXXXX";
+                
+                break;
+            case "medium":
+                Board[r][c] = "XXXXXXXXXXX";
+                
+                break;
+            case "large":
+                Board[r][c] = "XXXXXXXXXXXX";
+                break;
+            default:
+                break;
+                
+        }
     }
 
     /**
@@ -479,8 +508,6 @@ public class MemoryGame {
         brdRow = 0;
 
     }
-
-
 
     /**
      * called when all words are matched, and displays the end results including
