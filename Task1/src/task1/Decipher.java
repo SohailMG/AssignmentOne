@@ -93,6 +93,7 @@ public class Decipher {
             System.out.println("File doesn't exit");
         } finally {
             fileReader.close();
+           
 
         }
 
