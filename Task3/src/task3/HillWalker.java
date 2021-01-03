@@ -18,9 +18,11 @@ abstract class State {
 //    memeber variables used for setMins and setHours
     public int Mins;
     public int hrs;
+    
     public final int MAX_ALTIMETER = 1500;
     int meters = 0;
-    public Scanner scan;
+    
+    public Scanner scan = new Scanner(System.in);
 //    End used to quite program when it is set to True
     public boolean End;
 
@@ -28,9 +30,9 @@ abstract class State {
     static State time, altimeter, setHours, setMins, current, start;
 
     /**
-     * checkState prints out the current state the user is in
+     * showState prints out the current state the user is in
      */
-    void checkState() {
+    void showState() {
     }
 
     /**
@@ -43,12 +45,12 @@ abstract class State {
 }
 
 /**
- * beginning state MODE > changes state to altimeter. no SET action in this
+ * beginning state. MODE > changes state to altimeter. no SET action in this
  */
 class Start extends State {
 
     @Override
-    void checkState() {
+    void showState() {
         System.out.println("-----------------------------------");
         System.out.println("          Hill Walker         ");
         System.out.println("-----------------------------------");
@@ -65,8 +67,9 @@ class Start extends State {
             System.out.println("to exit Hill Walker......... Quit" + "\n");
             System.out.print(">");
 
-            scan = new Scanner(System.in);
 
+
+            // btn holds value of user input either MODE or SET
             String btn = scan.next();
 
             switch (btn.toUpperCase()) {
@@ -97,7 +100,7 @@ class Start extends State {
 class Time extends State {
 
     @Override
-    void checkState() {
+    void showState() {
         System.out.println("-----------------------------------");
         System.out.println("          Time Mode           ");
         System.out.println("-----------------------------------");
@@ -114,7 +117,7 @@ class Time extends State {
             System.out.println("Set Mode to setHours........ SET " + "\n");
             System.out.println("to exit Hill Walker......... Quit" + "\n");
             System.out.print(">");
-            scan = new Scanner(System.in);
+
             String btn = scan.next();
 
             switch (btn.toUpperCase()) {
@@ -146,7 +149,7 @@ class SetHours extends State {
 
 //    int Hours = 0;
     @Override
-    void checkState() {
+    void showState() {
         System.out.println("-----------------------------------");
         System.out.println("           Set Hours          ");
         System.out.println("-----------------------------------");
@@ -162,7 +165,7 @@ class SetHours extends State {
             System.out.println("Add 1 to Hours................ SET " + "\n");
             System.out.println("to exit Hill Walker......... Quit" + "\n");
             System.out.print(">");
-            scan = new Scanner(System.in);
+
             String btn = scan.next();
 
             switch (btn.toUpperCase()) {
@@ -197,7 +200,7 @@ class Altimeter extends State {
     Scanner s1;
 
     @Override
-    void checkState() {
+    void showState() {
         System.out.println("-----------------------------------");
         System.out.println("           Altimeter          ");
         System.out.println("-----------------------------------");
@@ -214,7 +217,7 @@ class Altimeter extends State {
             System.out.println("Remain in Altimeter....... SET " + "\n");
             System.out.println("to exit Hill Walker......... Quit" + "\n");
             System.out.print(">");
-            scan = new Scanner(System.in);
+
             String btn = scan.next();
 
             switch (btn.toUpperCase()) {
@@ -251,7 +254,7 @@ class Altimeter extends State {
 class SetMins extends State {
 
     @Override
-    void checkState() {
+    void showState() {
         System.out.println("-----------------------------------");
         System.out.println("            Set Mins               ");
         System.out.println("-----------------------------------");
@@ -309,23 +312,24 @@ public class HillWalker {
         try {
             while (!State.current.End) {
 
-                State.current.checkState();
-
+                State.current.showState();
                 State.current.checkAction();
 
             }
 
-//            closing scanner object from all states once program ends
         } catch (Exception ex) {
             
+//      closing scanner object from all states once program ends
         } finally {
-            State s = null;
             try {
 
-                s.scan.close();
+                State.setHours.scan.close();
+                State.altimeter.scan.close();
+                State.time.scan.close();
+                State.start.scan.close();
+                State.current.scan.close();
+                State.setMins.scan.close();
             } catch (NullPointerException e) {
-                
-
             }
         }
 

@@ -13,6 +13,7 @@ import java.util.ArrayList;
  * as well as adding borders to the game board in accordance to the file
  * 
  * @author Sohail Gsais
+ * @see Base
  * 
  */
 class Visuals extends Base {

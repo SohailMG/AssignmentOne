@@ -13,12 +13,12 @@ import java.util.Set;
  * This is a Memory Game where the user is given a grid of hidden words and the
  * goal is to get all the matching words and complete the grid. the higher the
  * level the bigger the grid.
- *
+ * 
  * @author Sohail Gsais
+ * @see Base 
  *
  */
 public class MemoryGame extends Base {
-
 
 
     public static void main(String[] args) {

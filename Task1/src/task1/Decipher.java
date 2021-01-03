@@ -8,14 +8,26 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Task:1
+ * Reading an encoded message from a text file, then decoding
+ * the message using the given cipher and writing decoded
+ * message into another file.
+ * 
+ * @author Sohail Gsais
+ */
+
 public class Decipher {
 
-    static File f;
+    // declaring global variables
+    static final String DATAFILE = System.getProperty("user.dir") + File.separator + "datafile.txt";
+    static final String RESULTS = System.getProperty("user.dir") + File.separator + "Results.txt";
+    static File encryptedFile = new File(DATAFILE);
+    static File decryptedFIle = new File(RESULTS);
     static Scanner fileReader;
 
     public static void main(String[] args) {
 
-        String dataFile = System.getProperty("user.dir") + File.separator + "datafile.txt";
 
         // array of both vowels and consosntants 
         char[] vowels = {' ', 'a', 'A', 'e', 'E', 'i', 'I', 'o', 'O', 'u', 'U', 'y', 'Y'};
@@ -24,19 +36,20 @@ public class Decipher {
             'q', 'Q', 'r', 'R', 's', 'S', 't', 'T', 'v', 'V', 'w', 'W', 'x', 'X', 'z', 'Z'};
 
         // file object of encrypted file 
-        f = new File(dataFile);
+        
+        
 
         /**
          * try and catch block to catch filenotfound exception.
          */
         try {
             // creating a filereader scanner object
-            fileReader = new Scanner(f);
+            fileReader = new Scanner(encryptedFile);
 
             while (fileReader.hasNextLine()) {
 
-                // storing encrypted file content into a string variable 
-                String encryption = fileReader.nextLine();
+                // storing encrypted file decodedMsg into a string variable 
+                String encodedMsg = fileReader.nextLine();
 
                 // regular expression to extract digits from a given 
                 String regex = "\\d+";
@@ -47,9 +60,9 @@ public class Decipher {
                 /**
                  * parsing through encrypted string
                  */
-                for (int i = 0; i < encryption.length(); i++) {
+                for (int i = 0; i < encodedMsg.length(); i++) {
 
-                    char c = encryption.charAt(i);
+                    char c = encodedMsg.charAt(i);
 
                     /*
                         checking if a character is a C,V or a Space
@@ -57,23 +70,23 @@ public class Decipher {
                     switch (c) {
                         case 'C':
                             try {
-                                // calling extractNums to get numbers following by char C
-                                extractNums(encryption, i, regex, consonants);
+                                // calling extractNums to get numbers followed by char C
+                                extractNums(encodedMsg, i, regex, consonants);
 
                             } catch (StringIndexOutOfBoundsException siobe) {
                                 // handleExce is called to handle exception
-                                handleExce(encryption, consonants);
+                                handleExce(encodedMsg, consonants);
 
                             }
                             break;
                         case 'V':
                             try {
                                 // calling extractNums to get numbers following by char V
-                                extractNums(encryption, i, regex, vowels);
+                                extractNums(encodedMsg, i, regex, vowels);
 
                             } catch (StringIndexOutOfBoundsException siobe) {
                                 // handleExce is called to handle exception
-                                handleExce(encryption, vowels);
+                                handleExce(encodedMsg, vowels);
 
                             }
                             break;
@@ -93,6 +106,7 @@ public class Decipher {
             System.out.println("File doesn't exit");
         } finally {
             fileReader.close();
+            
            
 
         }
@@ -105,24 +119,24 @@ public class Decipher {
      * second last char is a V. then will convert char followed by V into an
      * integer and print out it's value and the same if it is a C
      *
-     * @param encryption encrypted char from datafile
+     * @param encodedMsg encrypted char from datafile
      * @param arr a vowels or consonants array passed
      */
-    public static void handleExce(String encryption, char[] arr) {
+    public static void handleExce(String encodedMsg, char[] arr) {
 
-        char num = encryption.charAt(encryption.length() - 2);
+        char num = encodedMsg.charAt(encodedMsg.length() - 2);
         if (num == 'C') {
-            char d = encryption.charAt(encryption.length() - 1);
+            char d = encodedMsg.charAt(encodedMsg.length() - 1);
             System.out.print(arr[Character.getNumericValue(d)]);
 
-            char content = arr[Character.getNumericValue(d)];
-            writeToFile(content);
+            char decodedMsg = arr[Character.getNumericValue(d)];
+            writeToFile(decodedMsg);
         } else if (num == 'V') {
-            char d = encryption.charAt(encryption.length() - 1);
+            char d = encodedMsg.charAt(encodedMsg.length() - 1);
             System.out.print(arr[Character.getNumericValue(d)]);
 
-            char content = arr[Character.getNumericValue(d)];
-            writeToFile(content);
+            char decodedMsg = arr[Character.getNumericValue(d)];
+            writeToFile(decodedMsg);
         }
     }
 
@@ -130,14 +144,14 @@ public class Decipher {
      * extracts numbers from a given string using regular expression then prints
      * the deciphered letter vowel or consonant at index of extracted number
      *
-     * @param encryption encrypted text from file such as C12V3
+     * @param encodedMsg encrypted text from file such as C12V3
      * @param i iterator
      * @param regex regular expression to extract numbers "\\d+"
      * @param arr a consonants array or vowels depending on the character
      * @throws StringIndexOutOfBoundsException
      */
-    public static void extractNums(String encryption, int i, String regex, char[] arr) {
-        String nums = encryption.substring(i, i + 3);
+    public static void extractNums(String encodedMsg, int i, String regex, char[] arr) {
+        String nums = encodedMsg.substring(i, i + 3);
 
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(nums);
@@ -148,29 +162,28 @@ public class Decipher {
             System.out.print(arr[num]);
 
             // writing deciphered character into a file
-            char content = arr[num];
-            writeToFile(content);
+            char decodedMsg = arr[num];
+            writeToFile(decodedMsg);
         }
 
     }
 
     /**
-     * writes the deciphered content into a text file. takes deciphered letter
+     * writes the deciphered decodedMsg into a text file. takes deciphered letter
      * as a parameter.
      *
-     * @param content deciphered char
+     * @param decodedMsg deciphered char
      */
-    public static void writeToFile(char content) {
+    public static void writeToFile(char decodedMsg) {
 
         boolean FileCreated;
 
         try {
-            File Results = new File("Results.txt");
-            if (Results.createNewFile()) {
+            if (decryptedFIle.createNewFile()) {
                 FileCreated = true;
             } else {
-                try (FileWriter w = new FileWriter("Results.txt", true)) {
-                    w.write(content);
+                try (FileWriter w = new FileWriter(RESULTS, true)) {
+                    w.write(decodedMsg);
                 }
             }
         } catch (IOException e) {
