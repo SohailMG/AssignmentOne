@@ -62,6 +62,7 @@ class Start extends State {
 
             System.out.println("\n" + "Change Mode to Altimeter.... MODE" + "\n");
             System.out.println("Performs no Action.......... SET " + "\n");
+            System.out.println("to exit Hill Walker......... Quit" + "\n");
             System.out.print(">");
 
             scan = new Scanner(System.in);
@@ -78,6 +79,7 @@ class Start extends State {
                     return;
 
                 default:
+                    System.out.println(btn + " is an Invalid Entry " + "\n");
                     System.out.println("\n" + "> Please Press MODE");
 
             }
@@ -110,6 +112,7 @@ class Time extends State {
 
             System.out.println("\n" + "Change Mode to Altimeter.... MODE" + "\n");
             System.out.println("Set Mode to setHours........ SET " + "\n");
+            System.out.println("to exit Hill Walker......... Quit" + "\n");
             System.out.print(">");
             scan = new Scanner(System.in);
             String btn = scan.next();
@@ -123,9 +126,11 @@ class Time extends State {
                     current = altimeter;
                     return;
                 case "QUIT":
+                    
                     End = true;
                     return;
                 default:
+                    System.out.println(btn + " is an Invalid Entry " + "\n");
                     System.out.println("> Please Choose Set or Mode: ");
 
             }
@@ -155,6 +160,7 @@ class SetHours extends State {
 
             System.out.println("\n" + "Change display to set mins.... MODE" + "\n");
             System.out.println("Add 1 to Hours................ SET " + "\n");
+            System.out.println("to exit Hill Walker......... Quit" + "\n");
             System.out.print(">");
             scan = new Scanner(System.in);
             String btn = scan.next();
@@ -169,9 +175,11 @@ class SetHours extends State {
                     current = setMins;
                     return;
                 case "QUIT":
+                    
                     End = true;
                     return;
                 default:
+                    System.out.println(btn + " is an Invalid Entry " + "\n");
                     System.out.println("> Please Choose SET or MODE: ");
 
             }
@@ -204,6 +212,7 @@ class Altimeter extends State {
 
             System.out.println("\n" + "Change display to Time.... MODE" + "\n");
             System.out.println("Remain in Altimeter....... SET " + "\n");
+            System.out.println("to exit Hill Walker......... Quit" + "\n");
             System.out.print(">");
             scan = new Scanner(System.in);
             String btn = scan.next();
@@ -227,6 +236,7 @@ class Altimeter extends State {
                     End = true;
                     return;
                 default:
+                    System.out.println(btn + " is an Invalid Entry " + "\n");
                     System.out.println("> Please Choose Set or Mode: ");
 
             }
@@ -253,6 +263,7 @@ class SetMins extends State {
         while (true) {
             System.out.println("\n" + "Change Mode to Time.... MODE" + "\n");
             System.out.println("Add 1 minut to Time.... SET " + "\n");
+            System.out.println("to exit Hill Walker......... Quit" + "\n");
             System.out.println("Minutes added : " + Mins + "\n");
             System.out.print(">");
 
@@ -272,6 +283,7 @@ class SetMins extends State {
                     End = true;
                     return;
                 default:
+                    System.out.println(btn + " is an Invalid Entry " + "\n");
                     System.out.println("> Please Choose SET or MODE: ");
 
             }
@@ -305,12 +317,14 @@ public class HillWalker {
 
 //            closing scanner object from all states once program ends
         } catch (Exception ex) {
+            
         } finally {
             State s = null;
             try {
 
                 s.scan.close();
             } catch (NullPointerException e) {
+                
 
             }
         }

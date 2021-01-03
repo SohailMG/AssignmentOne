@@ -17,25 +17,9 @@ import java.util.Set;
  * @author Sohail Gsais
  *
  */
-public class MemoryGame {
+public class MemoryGame extends Base {
 
-    // declaring String vaariables that will store game data 
-    static String firstInput, secondInput, makeGuess, activeFile;
 
-    // pos list stores the 2d array indexes
-    // matchedWords stores the position of all matched words
-    static ArrayList<String> pos = new ArrayList<>();
-    static ArrayList<String> matchedWords = new ArrayList<>();
-
-    static String[][] Board;
-    static int row, colm;
-
-    static boolean userQuit = false;
-    static int matches = 0, numOfTries = 0;
-    static int firstrowPos, firstcolmPos, secondrowPos, secondcolmPos;
-
-    // brdRow and brdColm are used to displays row and colm positions of the board
-    static int brdRow = 0, brdColm = 0;
 
     public static void main(String[] args) {
 
@@ -78,14 +62,15 @@ public class MemoryGame {
 
             }
         }
+        // hashmap of 2d array indexes as keys and words as values
         HashMap boardPos = new HashMap<>();
 
-        /**
-         * try and catch block. reading file data into an array of pairs.
-         * shuffling the array each run to randomise elements. calling
-         * fillBoard() to display Game Board. creating a hashmap of 2d array
-         * indexes as keys and file words as values
-         *
+        /*
+          try and catch block. reading file data into an array of pairs.
+          shuffling the array each run to randomise elements. calling
+          fillBoard() to fill Game Board with Xs. creating a hashmap of 2d array
+          indexes as keys and file words as values
+         
          */
         try {
 
@@ -171,29 +156,29 @@ public class MemoryGame {
     }
 
     /**
-     * called when second input has already been matched.
-     * allows user to retry and hides their first guess
+     * called when second input has already been matched. allows user to retry
+     * and hides their first guess
      */
     public static void resetBoard() {
         System.out.println("\n" + "Word already Matched try again");
         int r = Character.getNumericValue(firstInput.charAt(0));
         int c = Character.getNumericValue(firstInput.charAt(1));
         switch (activeFile) {
-            
+
             case "small":
                 Board[r][c] = "XXXXXXXX";
-                
+
                 break;
             case "medium":
                 Board[r][c] = "XXXXXXXXXXX";
-                
+
                 break;
             case "large":
                 Board[r][c] = "XXXXXXXXXXXX";
                 break;
             default:
                 break;
-                
+
         }
     }
 
@@ -489,7 +474,7 @@ public class MemoryGame {
     }
 
     /**
-     * displays the game board
+     * displays the game board 
      */
     public static void showBoard() {
 

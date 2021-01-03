@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * @author Sohail Gsais
  * 
  */
-class Visuals extends MemoryGame {
+class Visuals extends Base {
 
     /**
      * adds white space to words in small.txt file
